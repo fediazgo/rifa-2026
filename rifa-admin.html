@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Rifa Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#C9A84C;--gold2:#E8C96A;
+    --green:#2d7a4f;--green2:#3aaf6f;--green3:rgba(58,175,111,.15);
+    --amber:#b87333;--amber2:rgba(184,115,51,.15);
+    --red:#7a2d2d;--red2:#c44;
+    --dark:#0D0A06;--dark2:#1A1408;--dark3:#261E0F;--dark4:#0f0c07;
+    --cream:#F5EDD8;--cream2:#D4C4A0;
+    --border:rgba(201,168,76,.18);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--dark4);color:var(--cream);font-family:'Cormorant Garamond',serif;
+    min-height:100vh;overflow-x:hidden}
+
+  /* LOGIN */
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .login-box{background:var(--dark2);border:1px solid var(--gold);border-radius:8px;
+    padding:48px 40px;max-width:380px;width:100%;text-align:center;
+    box-shadow:0 0 60px rgba(201,168,76,.15)}
+  .login-icon{font-size:2.4rem;margin-bottom:12px}
+  .login-title{font-family:'Playfair Display',serif;font-size:1.8rem;
+    font-weight:900;color:var(--gold2);margin-bottom:6px}
+  .login-sub{color:var(--cream2);font-size:.9rem;margin-bottom:28px}
+  .login-input{width:100%;background:var(--dark3);border:1px solid var(--border);
+    border-radius:4px;padding:12px 16px;color:var(--cream);font-size:1rem;
+    font-family:'Cormorant Garamond',serif;outline:none;text-align:center;
+    letter-spacing:.1em;transition:border-color .2s}
+  .login-input:focus{border-color:var(--gold)}
+  .login-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:var(--dark);border:none;border-radius:40px;padding:13px;
+    font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.12em;
+    font-weight:500;cursor:pointer;transition:all .2s}
+  .login-btn:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(201,168,76,.35)}
+  .login-err{color:#f77;font-size:.82rem;margin-top:10px;font-family:'DM Mono',monospace}
+
+  /* ADMIN LAYOUT */
+  .admin{display:none;min-height:100vh}
+  .topbar{background:var(--dark2);border-bottom:1px solid var(--border);
+    padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100}
+  .topbar-brand{font-family:'Playfair Display',serif;font-size:1.1rem;
+    font-weight:700;color:var(--gold2)}
+  .topbar-brand span{color:var(--cream2);font-size:.75rem;font-family:'DM Mono',monospace;
+    margin-left:10px;letter-spacing:.1em}
+  .btn-logout{background:none;border:1px solid var(--border);color:var(--cream2);
+    padding:6px 14px;border-radius:20px;font-family:'DM Mono',monospace;
+    font-size:.65rem;cursor:pointer;letter-spacing:.08em;transition:all .2s}
+  .btn-logout:hover{border-color:var(--gold);color:var(--cream)}
+
+  .content{padding:28px 24px;max-width:1100px;margin:0 auto}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+  .stat-card{background:var(--dark2);border:1px solid var(--border);border-radius:6px;
+    padding:18px 20px;text-align:center}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1}
+  .stat-lbl{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.15em;
+    color:var(--cream2);text-transform:uppercase;margin-top:4px}
+  .stat-card.s-total  .stat-num{color:var(--gold2)}
+  .stat-card.s-paid   .stat-num{color:var(--green2)}
+  .stat-card.s-pend   .stat-num{color:var(--amber)}
+  .stat-card.s-avail  .stat-num{color:var(--cream2)}
+  .stat-card.s-money  .stat-num{color:var(--gold2);font-size:1.4rem}
+
+  /* TOOLBAR */
+  .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  .filter-btn{background:var(--dark3);border:1px solid var(--border);color:var(--cream2);
+    padding:7px 16px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.67rem;
+    letter-spacing:.08em;cursor:pointer;transition:all .2s}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold2);
+    background:rgba(201,168,76,.08)}
+  .btn-refresh{background:none;border:1px solid var(--border);color:var(--cream2);
+    padding:7px 14px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.67rem;
+    letter-spacing:.08em;cursor:pointer;transition:all .2s;margin-left:auto}
+  .btn-refresh:hover{border-color:var(--gold);color:var(--gold2)}
+
+  /* TABLE */
+  .table-wrap{overflow-x:auto;border-radius:6px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  thead{background:var(--dark3)}
+  th{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;
+    color:var(--gold);text-transform:uppercase;padding:12px 14px;
+    text-align:left;border-bottom:1px solid var(--border)}
+  td{padding:11px 14px;border-bottom:1px solid rgba(201,168,76,.07);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(201,168,76,.04)}
+
+  .badge-paid{display:inline-block;background:var(--green3);border:1px solid rgba(58,175,111,.4);
+    color:var(--green2);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+    padding:3px 10px;border-radius:20px;text-transform:uppercase}
+  .badge-pend{display:inline-block;background:var(--amber2);border:1px solid rgba(184,115,51,.4);
+    color:var(--amber);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+    padding:3px 10px;border-radius:20px;text-transform:uppercase}
+
+  .num-cell{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;color:var(--gold2)}
+
+  .action-btns{display:flex;gap:6px;flex-wrap:wrap}
+  .btn-pay{background:var(--green3);border:1px solid rgba(58,175,111,.4);color:var(--green2);
+    padding:5px 12px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.62rem;
+    letter-spacing:.06em;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .btn-pay:hover{background:rgba(58,175,111,.25)}
+  .btn-unpay{background:var(--amber2);border:1px solid rgba(184,115,51,.4);color:var(--amber);
+    padding:5px 12px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.62rem;
+    letter-spacing:.06em;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .btn-unpay:hover{background:rgba(184,115,51,.25)}
+  .btn-del{background:rgba(180,60,60,.12);border:1px solid rgba(180,60,60,.3);color:#c77;
+    padding:5px 10px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.6rem;
+    cursor:pointer;transition:all .2s}
+  .btn-del:hover{background:rgba(180,60,60,.25)}
+
+  /* WA button inline */
+  .btn-wa-sm{background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);
+    color:rgba(58,211,102,.9);padding:5px 10px;border-radius:20px;
+    font-family:'DM Mono',monospace;font-size:.6rem;cursor:pointer;
+    text-decoration:none;display:inline-block;transition:all .2s;white-space:nowrap}
+  .btn-wa-sm:hover{background:rgba(37,211,102,.22)}
+
+  /* MINI GRID */
+  .mini-grid-wrap{margin-top:32px}
+  .mini-grid-title{font-family:'Playfair Display',serif;font-size:1.1rem;
+    font-weight:700;color:var(--gold2);margin-bottom:16px}
+  .mini-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-width:480px}
+  .mg-btn{aspect-ratio:1;border-radius:2px;display:flex;align-items:center;
+    justify-content:center;font-family:'DM Mono',monospace;font-size:.65rem;font-weight:500}
+  .mg-avail{background:var(--dark3);border:1px solid rgba(201,168,76,.25);color:var(--cream2)}
+  .mg-pend{background:#2d200a;border:1px solid rgba(184,115,51,.5);color:var(--amber)}
+  .mg-paid{background:#0d2016;border:1px solid rgba(58,175,111,.4);color:var(--green2)}
+
+  .empty-state{text-align:center;padding:48px 20px;color:var(--cream2);
+    font-size:.9rem;line-height:1.8}
+  .empty-icon{font-size:2rem;margin-bottom:10px}
+
+  .toast{position:fixed;bottom:24px;right:24px;z-index:999;
+    background:var(--dark2);border:1px solid var(--gold);border-radius:6px;
+    padding:12px 20px;font-family:'DM Mono',monospace;font-size:.72rem;
+    color:var(--gold2);box-shadow:0 8px 30px rgba(0,0,0,.6);
+    animation:slideUp .3s ease;letter-spacing:.08em}
+  .toast.err{border-color:var(--red2);color:#f88}
+  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(201,168,76,.2);
+    border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}
+
+  @media(max-width:640px){
+    .content{padding:16px 12px}
+    th:nth-child(5),td:nth-child(5){display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-icon">🔐</div>
+    <p class="login-title">Panel Admin</p>
+    <p class="login-sub">Rifa Premium · 2026</p>
+    <input class="login-input" type="password" id="pwd-input"
+      placeholder="Contraseña" maxlength="40"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <p class="login-err" id="login-err" style="display:none">Contraseña incorrecta</p>
+  </div>
+</div>
+
+<!-- ══ ADMIN ══════════════════════════════════════════════ -->
+<div class="admin" id="admin">
+
+  <div class="topbar">
+    <div class="topbar-brand">
+      🎟️ Rifa Admin
+      <span>PANEL DE CONTROL</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats" id="stats">
+      <div class="stat-card s-total"><div class="stat-num" id="s-total">—</div><div class="stat-lbl">Total registros</div></div>
+      <div class="stat-card s-paid"><div class="stat-num" id="s-paid">—</div><div class="stat-lbl">Pagados ✓</div></div>
+      <div class="stat-card s-pend"><div class="stat-num" id="s-pend">—</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat-card s-avail"><div class="stat-num" id="s-avail">—</div><div class="stat-lbl">Disponibles</div></div>
+      <div class="stat-card s-money"><div class="stat-num" id="s-money">—</div><div class="stat-lbl">Recaudo confirmado</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('pendiente',this)">Pendientes</button>
+      <button class="filter-btn" onclick="setFilter('pagado',this)">Pagados</button>
+      <button class="btn-refresh" onclick="loadData()"><span class="spinner" id="ref-spin" style="display:none"></span>↻ Actualizar</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table id="reg-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>WhatsApp</th>
+            <th>Correo</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="reg-tbody">
+          <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Cargando...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mini Grid -->
+    <div class="mini-grid-wrap">
+      <p class="mini-grid-title">Vista de mapa de números</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:.8rem;color:var(--cream2)">
+        <span style="display:flex;align-items:center;gap:6px">
+          <span style="width:12px;height:12px;background:var(--dark3);border:1px solid rgba(201,168,76,.25);border-radius:2px;display:inline-block"></span> Disponible
+        </span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <span style="width:12px;height:12px;background:#2d200a;border:1px solid rgba(184,115,51,.5);border-radius:2px;display:inline-block"></span> Pendiente
+        </span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <span style="width:12px;height:12px;background:#0d2016;border:1px solid rgba(58,175,111,.4);border-radius:2px;display:inline-block"></span> Pagado
+        </span>
+      </div>
+      <div class="mini-grid" id="mini-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+// ══ CONFIGURACIÓN ═════════════════════════════════════════
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWIa-F1eeETn6GbXvlHcQQtr9oOhi2WcFVjW1y77neoFQBp8mqzCsuiBdmeX-pkcCS/exec'; // ← igual que en landing
+
+// ══ ESTADO ════════════════════════════════════════════════
+var pwd        = '';
+var allRows    = [];
+var curFilter  = 'all';
+
+// ══ LOGIN ══════════════════════════════════════════════════
+function doLogin() {
+  var p = document.getElementById('pwd-input').value.trim();
+  if (!p) return;
+  pwd = p;
+  // Validar contra el script
+  fetch(SCRIPT_URL + '?action=list&pwd=' + encodeURIComponent(p))
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin').style.display = '';
+        allRows = res.data || [];
+        renderAll();
+      } else {
+        document.getElementById('login-err').style.display = '';
+        pwd = '';
+      }
+    })
+    .catch(function() {
+      document.getElementById('login-err').textContent = 'Error de conexión';
+      document.getElementById('login-err').style.display = '';
+    });
+}
+
+function doLogout() {
+  pwd = '';
+  document.getElementById('login-screen').style.display = '';
+  document.getElementById('admin').style.display = 'none';
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('login-err').style.display = 'none';
+}
+
+// ══ CARGAR DATOS ═══════════════════════════════════════════
+function loadData() {
+  var spin = document.getElementById('ref-spin');
+  spin.style.display = 'inline-block';
+  fetch(SCRIPT_URL + '?action=list&pwd=' + encodeURIComponent(pwd))
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      spin.style.display = 'none';
+      if (res.ok) {
+        allRows = res.data || [];
+        renderAll();
+        showToast('Datos actualizados');
+      } else {
+        showToast('Error: ' + res.msg, true);
+      }
+    })
+    .catch(function(){
+      spin.style.display = 'none';
+      showToast('Error de conexión', true);
+    });
+}
+
+// ══ RENDER ═════════════════════════════════════════════════
+function renderAll() {
+  updateStats();
+  renderTable();
+  renderMiniGrid();
+}
+
+function updateStats() {
+  var paid  = allRows.filter(function(r){ return r.estado === 'pagado'; }).length;
+  var pend  = allRows.filter(function(r){ return r.estado === 'pendiente'; }).length;
+  var avail = 100 - allRows.length;
+  var money = paid * 20000;
+  document.getElementById('s-total').textContent = allRows.length;
+  document.getElementById('s-paid').textContent  = paid;
+  document.getElementById('s-pend').textContent  = pend;
+  document.getElementById('s-avail').textContent = avail < 0 ? 0 : avail;
+  document.getElementById('s-money').textContent = '$' + money.toLocaleString('es-CO');
+}
+
+function setFilter(f, el) {
+  curFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  var rows = curFilter === 'all'
+    ? allRows
+    : allRows.filter(function(r){ return r.estado === curFilter; });
+
+  var tbody = document.getElementById('reg-tbody');
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📋</div>No hay registros para mostrar</div></td></tr>';
+    return;
+  }
+
+  rows.sort(function(a,b){
+    if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
+    if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
+    return a.numero.localeCompare(b.numero);
+  });
+
+  var html = '';
+  rows.forEach(function(r) {
+    var badge = r.estado === 'pagado'
+      ? '<span class="badge-paid">✓ Pagado</span>'
+      : '<span class="badge-pend">⏳ Pendiente</span>';
+
+    var actions = '';
+    if (r.estado === 'pendiente') {
+      actions += '<button class="btn-pay" onclick="markPaid(\'' + r.id + '\')">✓ Confirmar pago</button>';
+    } else {
+      actions += '<button class="btn-unpay" onclick="markUnpay(\'' + r.id + '\')">↩ Revertir</button>';
+    }
+
+    var waNum = r.wa.replace(/\D/g,'');
+    if (waNum.length >= 7) {
+      var waMsg = 'Hola ' + r.nombre + ', te confirmamos que tu numero ' + r.numero
+               + ' de la Rifa Premium esta ' + (r.estado === 'pagado' ? 'CONFIRMADO y jugara el 2 de mayo!' : 'pendiente de pago.');
+      actions += ' <a class="btn-wa-sm" href="https://wa.me/57' + waNum + '?text=' + encodeURIComponent(waMsg) + '" target="_blank">📲</a>';
+    }
+
+    actions += ' <button class="btn-del" onclick="delRow(\'' + r.id + '\')" title="Eliminar">✕</button>';
+
+    html += '<tr>'
+      + '<td class="num-cell">' + r.numero + '</td>'
+      + '<td>' + escHtml(r.nombre) + '</td>'
+      + '<td><a href="https://wa.me/57' + r.wa.replace(/\D/g,'') + '" target="_blank" style="color:var(--green2);text-decoration:none">' + escHtml(r.wa) + '</a></td>'
+      + '<td style="color:var(--cream2);font-size:.85rem">' + escHtml(r.correo || '—') + '</td>'
+      + '<td style="color:var(--cream2);font-size:.78rem;font-family:\'DM Mono\',monospace">' + escHtml(r.fecha) + '</td>'
+      + '<td>' + badge + '</td>'
+      + '<td><div class="action-btns">' + actions + '</div></td>'
+      + '</tr>';
+  });
+
+  tbody.innerHTML = html;
+}
+
+function renderMiniGrid() {
+  var map = {};
+  allRows.forEach(function(r){ map[r.numero] = r.estado; });
+
+  var grid = document.getElementById('mini-grid');
+  grid.innerHTML = '';
+  for (var i = 0; i < 100; i++) {
+    var lbl = i < 10 ? '0' + i : '' + i;
+    var st  = map[lbl] || 'avail';
+    var cls = st === 'pagado' ? 'mg-btn mg-paid' : st === 'pendiente' ? 'mg-btn mg-pend' : 'mg-btn mg-avail';
+    var d   = document.createElement('div');
+    d.className   = cls;
+    d.textContent = lbl;
+    d.title       = lbl + ': ' + (st === 'avail' ? 'Disponible' : st);
+    grid.appendChild(d);
+  }
+}
+
+// ══ ACCIONES ═══════════════════════════════════════════════
+function markPaid(id) {
+  apiCall('pay', id, 'pagado');
+}
+
+function markUnpay(id) {
+  if (!confirm('¿Revertir a pendiente de pago?')) return;
+  apiCall('unpay', id, 'pendiente');
+}
+
+function delRow(id) {
+  if (!confirm('¿Eliminar este registro? Esta acción no se puede deshacer.')) return;
+  fetch(SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id) + '&pwd=' + encodeURIComponent(pwd))
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        allRows = allRows.filter(function(r){ return r.id !== id; });
+        renderAll();
+        showToast('Registro eliminado');
+      } else {
+        showToast('Error: ' + res.msg, true);
+      }
+    })
+    .catch(function(){ showToast('Error de conexión', true); });
+}
+
+function apiCall(action, id, newStatus) {
+  fetch(SCRIPT_URL + '?action=' + action + '&id=' + encodeURIComponent(id) + '&pwd=' + encodeURIComponent(pwd))
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        allRows.forEach(function(r){ if (r.id === id) r.estado = newStatus; });
+        renderAll();
+        showToast(newStatus === 'pagado' ? '✓ Pago confirmado' : '↩ Revertido a pendiente');
+      } else {
+        showToast('Error: ' + res.msg, true);
+      }
+    })
+    .catch(function(){ showToast('Error de conexión', true); });
+}
+
+// ══ HELPERS ════════════════════════════════════════════════
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function showToast(msg, isErr) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.style.display = '';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display='none'; }, 3000);
+}
+</script>
+</body>
+</html>
