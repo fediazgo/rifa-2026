@@ -249,6 +249,28 @@ function guardar(){
     }
   });
 }
+
+// CONTADOR
+var targetDate = new Date("May 2, 2026 20:00:00").getTime();
+
+setInterval(function(){
+  var now = new Date().getTime();
+  var diff = targetDate - now;
+
+  if(diff < 0){
+    document.getElementById("countdown").innerHTML = "🎉 ¡SORTEO EN CURSO!";
+    return;
+  }
+
+  var d = Math.floor(diff / (1000*60*60*24));
+  var h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  var m = Math.floor((diff % (1000*60*60)) / (1000*60));
+  var s = Math.floor((diff % (1000*60)) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+    d + "d " + h + "h " + m + "m " + s + "s";
+},1000);
+
 </script>
 
 </body>
