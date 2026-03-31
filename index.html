@@ -4,431 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rifa Premium – Dispensador de Licor 🥃</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --blue:    #1A6FD4;
-  --blue2:   #2389FF;
-  --blue3:   #E8F3FF;
-  --blue4:   #C8E0FF;
-  --navy:    #0D3B7A;
-  --orange:  #FF6B2B;
-  --orange2: #FF8C55;
-  --yellow:  #FFD700;
-  --green:   #17B86A;
-  --green2:  #0E9455;
-  --red:     #E03434;
-  --white:   #FFFFFF;
-  --bg:      #EEF5FF;
-  --bg2:     #F7FAFF;
-  --text:    #0D2545;
-  --text2:   #3A5A8A;
-  --border:  #B8D4F5;
-  --shadow:  0 4px 24px rgba(26,111,212,.13);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;background:#EEF5FF;margin:0}
 
-/* ── HEADER ── */
+/* HEADER */
 header{
-  background:linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #2389FF 100%);
-  color:white;text-align:center;padding:56px 20px 48px;
-  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0D3B7A,#1A6FD4);
+  color:white;
+  text-align:center;
+  padding:50px 20px;
 }
-header::before{
-  content:'';position:absolute;inset:0;
-  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.header-badge{
-  display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
-  border-radius:30px;padding:6px 20px;font-size:.8rem;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;
-  backdrop-filter:blur(4px);
-}
-header h1{
+
+h1{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(3.5rem,10vw,7rem);
-  line-height:.95;letter-spacing:.03em;margin-bottom:8px;
-  text-shadow:0 4px 20px rgba(0,0,0,.25);
+  font-size:60px;
+  margin:0;
 }
-header h1 span{color:var(--yellow)}
-.header-sub{font-size:clamp(1.1rem,3vw,1.5rem);font-weight:600;
-  opacity:.92;margin-bottom:28px;line-height:1.3}
-.header-sub strong{color:var(--yellow)}
 
-
+h1 span{color:#FFD700}
 
 .countdown-box{
-  text-align:center;
-  margin-bottom:25px;
-}
-
-.count-title{
+  margin:20px 0;
   font-weight:800;
-  color:#FF6B2B;
-  margin-bottom:6px;
 }
-
-#countdown{
-  font-size:1.5rem;
-  font-weight:900;
-  color:#0D3B7A;
-}
-
-/* PRIZE CARD en header */
-.prize-card{
-  display:inline-flex;align-items:center;gap:16px;
-  background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);
-  border-radius:16px;padding:16px 28px;backdrop-filter:blur(8px);
-  margin-bottom:28px;max-width:560px;width:100%;
-  box-shadow:0 8px 32px rgba(0,0,0,.2);
-}
-.prize-emoji{font-size:2.8rem;flex-shrink:0}
-.prize-text{text-align:left}
-.prize-lbl{font-size:.72rem;font-weight:700;letter-spacing:.15em;
-  text-transform:uppercase;opacity:.75;margin-bottom:3px}
-.prize-name{font-size:clamp(1rem,2.5vw,1.35rem);font-weight:800;line-height:1.25}
 
 .prize-img{
-  width:85px;
-  height:85px;
-  object-fit:cover;
-  border-radius:14px;
-  border:2px solid rgba(255,255,255,.5);
-  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  width:300px;
+  border-radius:20px;
+  margin-top:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
-
-<div class="countdown-box">
-  <p class="count-title">⏳ SORTEO EN:</p>
-  <div id="countdown"></div>
-</div>
-
-/* CHIPS */
-.chips-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.chip{
-  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);
-  border-radius:30px;padding:8px 20px;backdrop-filter:blur(4px);
-  display:flex;flex-direction:column;align-items:center;
-}
-.chip-lbl{font-size:.65rem;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;opacity:.75}
-.chip-val{font-size:1rem;font-weight:800}
-.chip-val.big{font-size:1.2rem;color:var(--yellow)}
-
-/* ── NÚMEROS ── */
-.nums-section{
-  max-width:960px;margin:0 auto;padding:48px 20px 32px;
-}
-.sec-header{text-align:center;margin-bottom:32px}
-.sec-tag{
-  display:inline-block;background:var(--blue);color:white;
-  border-radius:30px;padding:5px 18px;font-size:.75rem;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;
-}
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.2rem);
-  color:var(--navy);letter-spacing:.03em;line-height:1;margin-bottom:6px}
-.sec-sub{font-size:1rem;color:var(--text2);font-weight:600}
-
-/* LEYENDA */
-.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
-  margin-bottom:24px;font-size:.85rem;font-weight:700;color:var(--text2)}
-.leg-item{display:flex;align-items:center;gap:7px}
-.ldot{width:16px;height:16px;border-radius:4px;flex-shrink:0}
-.l-avail{background:white;border:2px solid var(--blue)}
-.l-pend {background:#FFF3E0;border:2px solid var(--orange)}
-.l-paid {background:#E8F5E9;border:2px solid var(--green)}
 
 /* GRID */
-.grid-wrap{
-  background:white;border-radius:20px;padding:20px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-  margin-bottom:20px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:6px;
+  max-width:700px;
+  margin:30px auto;
+  background:white;
+  padding:20px;
+  border-radius:20px;
 }
-.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}
+
 .num-btn{
-  aspect-ratio:1;border-radius:10px;border:2px solid var(--blue4);
-  background:white;color:var(--navy);
-  font-family:'Nunito',sans-serif;font-size:clamp(.72rem,1.5vw,1rem);
-  font-weight:800;cursor:pointer;transition:all .18s ease;
-  display:flex;align-items:center;justify-content:center;
-  user-select:none;box-shadow:0 2px 6px rgba(26,111,212,.08);
-  position:relative;
+  padding:12px;
+  border-radius:10px;
+  border:2px solid #C8E0FF;
+  background:white;
+  font-weight:800;
+  cursor:pointer;
 }
-.num-btn:hover:not([disabled]){
-  background:var(--blue);color:white;border-color:var(--blue);
-  transform:scale(1.1);z-index:2;box-shadow:0 6px 18px rgba(26,111,212,.35);
+
+.num-btn:hover{
+  background:#1A6FD4;
+  color:white;
 }
+
 .num-btn.pending{
-  background:#FFF3E0;border-color:var(--orange2);
-  color:var(--orange);cursor:not-allowed;
-  font-size:clamp(.6rem,1.2vw,.8rem);
+  background:#FFF3E0;
+  color:#FF6B2B;
+  cursor:not-allowed;
 }
+
 .num-btn.paid{
-  background:#E8F5E9;border-color:var(--green);
-  color:var(--green2);cursor:not-allowed;
-}
-.num-btn.paid .tick{position:absolute;top:1px;right:3px;font-size:.55rem}
-.num-btn[disabled]{cursor:not-allowed}
-
-/* LOADING */
-.loading-bar{
-  text-align:center;padding:48px;color:var(--blue);
-  font-weight:700;font-size:1rem;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.spinner{display:inline-block;width:22px;height:22px;
-  border:3px solid var(--blue4);border-top-color:var(--blue);
-  border-radius:50%;animation:spin .8s linear infinite;
-  margin-right:8px;vertical-align:middle}
-
-/* STICKY BAR */
-.sticky-bar{
-  position:sticky;bottom:16px;z-index:100;
-  display:none;justify-content:center;padding:0 16px;
-}
-.sticky-pill{
-  background:var(--navy);color:white;
-  border-radius:60px;padding:12px 16px 12px 20px;
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;
-  box-shadow:0 8px 32px rgba(13,59,122,.4);
-  max-width:500px;width:100%;border:2px solid var(--blue2);
-}
-.sticky-info{display:flex;gap:16px;align-items:center}
-.sticky-block{text-align:center}
-.sticky-lbl{font-size:.62rem;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;opacity:.7}
-.sticky-num{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
-  color:var(--yellow);line-height:1}
-.sticky-sep{width:1px;height:34px;background:rgba(255,255,255,.2)}
-.wa-btn{
-  background:linear-gradient(135deg,#25D366,#128C7E);
-  color:white;border:none;border-radius:40px;
-  padding:12px 22px;font-family:'Nunito',sans-serif;
-  font-size:.85rem;font-weight:800;cursor:pointer;
-  white-space:nowrap;display:inline-flex;align-items:center;gap:7px;
-  text-decoration:none;transition:all .2s;box-shadow:0 4px 14px rgba(18,140,126,.4);
-}
-.wa-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(18,140,126,.5)}
-
-/* PASOS */
-.steps-section{
-  background:var(--bg2);border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);padding:48px 20px;
-}
-.steps-inner{max-width:900px;margin:0 auto}
-.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-top:28px}
-.step{
-  background:white;border-radius:16px;padding:26px 20px;
-  border:1px solid var(--border);box-shadow:var(--shadow);
-  position:relative;overflow:hidden;
-}
-.step::before{
-  content:attr(data-n);position:absolute;top:-8px;right:10px;
-  font-family:'Bebas Neue',sans-serif;font-size:5rem;
-  color:var(--blue3);line-height:1;pointer-events:none;
-}
-.step-icon{font-size:1.8rem;margin-bottom:10px;display:block}
-.step-ttl{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:6px}
-.step-dsc{font-size:.88rem;color:var(--text2);line-height:1.55;font-weight:600}
-
-.premium-img-box{
-  position:relative;
-  text-align:center;
-  margin-top:-20px;
-  margin-bottom:30px;
+  background:#E8F5E9;
+  color:#17B86A;
+  cursor:not-allowed;
 }
 
-.premium-img{
-  width:90%;
-  max-width:420px;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
-  transition:transform .4s ease;
-}
-
-.premium-img:hover{
-  transform:scale(1.05);
-}
-
-/* EFECTO BRILLO */
-.shine{
-  position:absolute;
-  top:0;
-  left:-75%;
-  width:50%;
-  height:100%;
-  background:linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,.6) 50%,
-    rgba(255,255,255,0) 100%
-  );
-  transform:skewX(-25deg);
-  animation:shineMove 3s infinite;
-}
-
-@keyframes shineMove{
-  0%{ left:-75%; }
-  100%{ left:130%; }
-}
-
-/* BADGE */
-.badge-premium{
-  position:absolute;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-  background:linear-gradient(135deg,#FFD700,#FFAA00);
-  color:#000;
-  font-weight:900;
-  padding:6px 16px;
-  border-radius:20px;
-  font-size:.8rem;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-}
-
-/* FOOTER */
-footer{
-  background:var(--navy);color:rgba(255,255,255,.8);
-  text-align:center;padding:36px 20px;font-size:.88rem;line-height:1.9;font-weight:600;
-}
-footer strong{color:var(--yellow)}
-
-/* ── OVERLAY / MODAL ── */
+/* MODAL */
 .overlay{
-  position:fixed;inset:0;z-index:400;
-  background:rgba(13,37,69,.7);backdrop-filter:blur(6px);
-  display:none;align-items:center;justify-content:center;padding:16px;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
-.overlay.show{display:flex;animation:fadeIn .22s ease}
+
 .modal{
-  background:white;border-radius:20px;padding:36px 30px;
-  max-width:440px;width:100%;position:relative;
-  box-shadow:0 20px 60px rgba(13,37,69,.3);
-}
-.modal-close{
-  position:absolute;top:14px;right:16px;background:var(--bg);
-  border:1px solid var(--border);color:var(--text2);
-  width:32px;height:32px;border-radius:50%;font-size:1rem;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .2s;
-}
-.modal-close:hover{background:var(--blue);color:white;border-color:var(--blue)}
-.modal-top{text-align:center;margin-bottom:24px}
-.modal-icon{font-size:2.4rem;margin-bottom:8px}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;
-  color:var(--navy);letter-spacing:.03em;margin-bottom:4px}
-.modal-num{display:inline-block;background:var(--blue);color:white;
-  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;
-  padding:4px 22px;border-radius:10px;letter-spacing:.05em}
-.modal-sub{font-size:.9rem;color:var(--text2);font-weight:600;margin-top:8px;line-height:1.4}
-
-
-
-/* FORM */
-.field{margin-bottom:14px}
-.field label{display:block;font-size:.78rem;font-weight:800;
-  letter-spacing:.1em;color:var(--navy);text-transform:uppercase;margin-bottom:6px}
-.field input{
-  width:100%;background:var(--bg);border:2px solid var(--border);
-  border-radius:10px;padding:12px 14px;color:var(--text);
-  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;
-  outline:none;transition:border-color .2s;
-}
-.field input:focus{border-color:var(--blue);background:white}
-.field input::placeholder{color:rgba(58,90,138,.4)}
-.opt-tag{font-weight:600;color:var(--text2);font-size:.72rem;
-  text-transform:none;letter-spacing:0;margin-left:4px}
-.btn-submit{
-  width:100%;background:linear-gradient(135deg,var(--blue),var(--blue2));
-  color:white;border:none;border-radius:40px;padding:14px;
-  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
-  cursor:pointer;transition:all .2s;margin-top:6px;
-  box-shadow:0 4px 16px rgba(26,111,212,.35);
-}
-.btn-submit:hover{transform:scale(1.02);box-shadow:0 6px 22px rgba(26,111,212,.45)}
-.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.err-box{
-  background:#FFF0F0;border:1px solid #FFBCBC;border-radius:10px;
-  padding:10px 14px;margin-top:10px;font-size:.88rem;
-  font-weight:700;color:var(--red);display:none;
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  width:320px;
 }
 
-
-
-/* SUCCESS */
-.success-panel{display:none}
-.suc-icon{font-size:3rem;margin-bottom:8px}
-.suc-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;
-  color:var(--green2);letter-spacing:.03em;margin-bottom:6px}
-.suc-msg{font-size:.92rem;color:var(--text2);font-weight:600;
-  line-height:1.5;margin-bottom:18px}
-.suc-num{display:inline-block;background:var(--green);color:white;
-  font-family:'Bebas Neue',sans-serif;font-size:2rem;
-  padding:4px 20px;border-radius:10px}
-.wa-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
-.wa-btn-org{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,#25D366,#128C7E);color:white;
-  border:none;border-radius:40px;padding:13px 22px;
-  font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;
-  cursor:pointer;text-decoration:none;transition:all .2s;
-  box-shadow:0 4px 14px rgba(18,140,126,.3);
-}
-.wa-btn-org:hover{transform:scale(1.02);box-shadow:0 6px 20px rgba(18,140,126,.4)}
-.wa-btn-self{
-  background:white;border:2px solid #25D366;color:var(--green2);
-  box-shadow:none;
-}
-.wa-btn-self:hover{background:#F0FFF6}
-.warn-pay{
-  background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;
-  padding:10px 14px;font-size:.82rem;font-weight:700;
-  color:#B8860B;line-height:1.5;
+input{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
 }
 
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-/* FLECHA INTERMITENTE */
-.arrow-hint{
-  text-align:center;padding:24px 20px 8px;background:var(--bg2);
-}
-.arrow-txt{
-  font-size:1.1rem;font-weight:800;color:var(--blue);
-  text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
-  animation:pulseText 1.5s ease-in-out infinite;
-}
-.arrow-chevrons{
-  display:flex;flex-direction:column;align-items:center;gap:0;
-  line-height:.7;
-}
-.arrow-chevrons span{
-  font-size:2.2rem;color:var(--orange);font-weight:900;
-  display:block;animation:dropArrow 1.2s ease-in-out infinite;
-}
-.arrow-chevrons span:nth-child(1){animation-delay:0s;  opacity:.4}
-.arrow-chevrons span:nth-child(2){animation-delay:.2s; opacity:.7}
-.arrow-chevrons span:nth-child(3){animation-delay:.4s; opacity:1}
-
-@keyframes dropArrow{
-  0%,100%{transform:translateY(0);  opacity:.3}
-  50%    {transform:translateY(6px);opacity:1}
-}
-@keyframes pulseText{
-  0%,100%{opacity:.6}
-  50%    {opacity:1}
-}
-
-@media(max-width:520px){
-  .grid{gap:4px}
-  .num-btn{font-size:.68rem;border-radius:7px}
-  .modal{padding:28px 18px}
-  .sticky-pill{border-radius:16px;gap:10px}
+button{
+  width:100%;
+  padding:12px;
+  background:#1A6FD4;
+  color:white;
+  border:none;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
 }
 </style>
 </head>
-// CONTADOR
+
+<body>
+
+<header>
+  <h1>GRAN RIFA <span>PREMIUM</span></h1>
+
+  <div class="countdown-box">
+    ⏳ <span id="countdown"></span>
+  </div>
+
+  <img src="dispensador_a.jpg" class="prize-img">
+</header>
+
+<div class="grid" id="grid"></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>Número <span id="num"></span></h3>
+
+    <input id="nombre" placeholder="Nombre completo">
+    <input id="wa" placeholder="WhatsApp">
+    <input id="correo" placeholder="Correo (opcional)">
+
+    <button id="btnGuardar">Reservar mi número</button>
+  </div>
+</div>
+
+<script>
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+
+var estados = {};
+var seleccionado = null;
+
+/* CONTADOR */
 var targetDate = new Date("May 2, 2026 20:00:00").getTime();
 
 setInterval(function(){
@@ -436,7 +155,7 @@ setInterval(function(){
   var diff = targetDate - now;
 
   if(diff < 0){
-    document.getElementById("countdown").innerHTML = "🎉 ¡SORTEO EN CURSO!";
+    document.getElementById("countdown").innerHTML = "🎉 SORTEO EN CURSO";
     return;
   }
 
@@ -446,403 +165,91 @@ setInterval(function(){
   var s = Math.floor((diff % (1000*60)) / 1000);
 
   document.getElementById("countdown").innerHTML =
-    d + "d " + h + "h " + m + "m " + s + "s";
+    d+"d "+h+"h "+m+"m "+s+"s";
 },1000);
 
+/* INICIO */
+window.onload = function(){
+  cargar();
 
-<body>
+  document.getElementById("btnGuardar").onclick = guardar;
+};
 
-<!-- ══ HEADER ════════════════════════════════════════════ -->
-<header>
-  <div class="header-badge">🎟️ Rifa Oficial · Solo 100 Números</div>
-  <h1>GRAN RIFA<br><span>PREMIUM</span></h1>
-  <p class="header-sub">¡Gana un <strong>Dispensador de Licor en Madera</strong><br>+ Botella de Whiskey!</p>
-
-<div class="prize-card">
-  <img src="dispensador_a.jpg" alt="Premio Rifa" class="prize-img">
-
-  <div class="prize-text">
-    <div class="prize-lbl">🏆 Premio único</div>
-    <div class="prize-name">
-      Dispensador de Licor en Madera<br>+ Botella de Whiskey
-    </div>
-  </div>
-</div>
-
-
-<div style="text-align:center;margin-top:-20px;margin-bottom:30px;">
-  <img src="dispensador_a.jpg" style="
-    width:90%;
-    max-width:420px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.4);
-  ">
-</div>
-
-<div class="premium-img-box">
-  <img src="dispensador_a.jpg" class="premium-img">
-  <div class="shine"></div>
-  <div class="badge-premium">🔥 PREMIO MAYOR</div>
-</div>
-
-
-  <div class="chips-row">
-    <div class="chip">
-      <span class="chip-lbl">📅 Fecha del sorteo</span>
-      <span class="chip-val">2 de Mayo · 2026</span>
-    </div>
-    <div class="chip">
-      <span class="chip-lbl">🎲 Lotería</span>
-      <span class="chip-val">Boyacá</span>
-    </div>
-    <div class="chip">
-      <span class="chip-lbl">💰 Valor por número</span>
-      <span class="chip-val big">$20.000</span>
-    </div>
-    <div class="chip">
-      <span class="chip-lbl">🔢 Disponibles</span>
-      <span class="chip-val" id="avail-count">100</span>
-    </div>
-  </div>
-</header>
-
-<!-- ══ PASOS ════════════════════════════════════════════ -->
-<section class="steps-section">
-  <div class="steps-inner">
-    <div class="sec-header">
-      <div class="sec-tag">📋 Proceso</div>
-      <h2 class="sec-title">¿CÓMO PARTICIPAR?</h2>
-    </div>
-    <div class="steps-grid">
-      <div class="step" data-n="1">
-        <span class="step-icon">🔢</span>
-        <p class="step-ttl">Elige tu número</p>
-        <p class="step-dsc">Toca cualquier número blanco disponible en la cuadrícula de abajo.</p>
-      </div>
-      <div class="step" data-n="2">
-        <span class="step-icon">📝</span>
-        <p class="step-ttl">Regístrate</p>
-        <p class="step-dsc">Ingresa tu nombre, WhatsApp y correo opcional.</p>
-      </div>
-      <div class="step" data-n="3">
-        <span class="step-icon">💳</span>
-        <p class="step-ttl">Paga</p>
-        <p class="step-dsc">Transfiere $20.000 y envía el comprobante al organizador.</p>
-      </div>
-      <div class="step" data-n="4">
-        <span class="step-icon">🎉</span>
-        <p class="step-ttl">¡Listo!</p>
-        <p class="step-dsc">El organizador confirma tu pago. El 2 de mayo jugamos con Lotería de Boyacá.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FLECHA ═════════════════════════════════════════════ -->
-<div class="arrow-hint">
-  <p class="arrow-txt">¡Elige tu número aquí abajo!</p>
-  <div class="arrow-chevrons">
-    <span>&#8964;</span>
-    <span>&#8964;</span>
-    <span>&#8964;</span>
-  </div>
-</div>
-
-<!-- ══ NÚMEROS ════════════════════════════════════════════ -->
-<section class="nums-section" id="numeros">
-  <div class="sec-header">
-    <div class="sec-tag">🍀 Selecciona tu suerte</div>
-    <h2 class="sec-title">ELIGE TU NÚMERO</h2>
-    <p class="sec-sub">Toca un número disponible para apartarlo</p>
-  </div>
-
-  <div class="legend">
-    <div class="leg-item"><div class="ldot l-avail"></div> Disponible</div>
-    <div class="leg-item"><div class="ldot l-pend"></div> Pendiente de pago</div>
-    <div class="leg-item"><div class="ldot l-paid"></div> Confirmado ✓</div>
-  </div>
-
-  <div class="grid-wrap">
-    <div id="loading" class="loading-bar">
-      <span class="spinner"></span>Cargando números...
-    </div>
-    <div class="grid" id="grid" style="display:none"></div>
-  </div>
-</section>
-
-<!-- STICKY BAR -->
-<div class="sticky-bar" id="sticky-bar">
-  <div class="sticky-pill">
-    <div class="sticky-info">
-      <div class="sticky-block">
-        <div class="sticky-lbl">Número</div>
-        <div class="sticky-num" id="sel-num-show">—</div>
-      </div>
-      <div class="sticky-sep"></div>
-      <div class="sticky-block">
-        <div class="sticky-lbl">Valor</div>
-        <div class="sticky-num" style="color:#FFD700">$20.000</div>
-      </div>
-    </div>
-    <a class="wa-btn" id="btn-wa" href="#" target="_blank">📲 Apartar ahora</a>
-  </div>
-</div>
-
-<footer>
-  <strong>Gran Rifa Premium · 2026</strong><br>
-  Sorteo el <strong>2 de mayo de 2026</strong> · <strong>Lotería de Boyacá</strong><br>
-  ⚠️ Solo juegan los números con pago confirmado
-</footer>
-
-<!-- ══ MODAL ══════════════════════════════════════════════ -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-
-    <!-- Formulario -->
-    <div id="form-panel">
-      <div class="modal-top">
-        <div class="modal-icon">🎟️</div>
-        <p class="modal-title">NÚMERO</p>
-        <div class="modal-num" id="sel-num-display">00</div>
-        <p class="modal-sub">Completa tus datos para reservar este número.<br>Se activará cuando confirmes el pago.</p>
-      </div>
-      <div class="field">
-        <label>Nombre completo *</label>
-        <input type="text" id="inp-nombre" placeholder="Tu nombre completo" maxlength="60">
-      </div>
-      <div class="field">
-        <label>WhatsApp * <span class="opt-tag">sin +57, ej: 3001234567</span></label>
-        <input type="tel" id="inp-wa" placeholder="3001234567" maxlength="15">
-      </div>
-      <div class="field">
-        <label>Correo <span class="opt-tag">opcional</span></label>
-        <input type="email" id="inp-correo" placeholder="tu@correo.com" maxlength="80">
-      </div>
-      <div class="err-box" id="err-box"></div>
-      <button class="btn-submit" id="btn-submit"></button>
-      <!--<button class="btn-submit" id="btn-submit" onclick="submitForm()">-->
-        Reservar mi número →
-      </button>
-    </div>
-
-    <!-- Éxito -->
-    <div id="success-panel" class="success-panel" style="text-align:center">
-      <div class="suc-icon">🎉</div>
-      <p class="suc-title">¡APARTADO!</p>
-      <p class="suc-msg">Tu número</p>
-      <div class="suc-num" id="conf-num">00</div>
-      <p class="suc-msg" style="margin-top:10px">
-        fue reservado para <strong id="conf-nombre"></strong><br><br>
-        Ahora notifica al organizador y envía tu comprobante de pago.
-      </p>
-      <div class="wa-btns">
-        <a id="wa-org-btn" href="#" target="_blank" class="wa-btn-org">
-          📲 Notificar al organizador
-        </a>
-        <a id="wa-self-btn" href="#" target="_blank" class="wa-btn-org wa-btn-self">
-          📋 Guardar mi confirmación
-        </a>
-      </div>
-      <div class="warn-pay">
-        ⚠️ Recuerda: tu número solo juega cuando el organizador confirme tu pago.
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── CONFIGURACIÓN ─────────────────────────────────
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWIa-F1eeETn6GbXvlHcQQtr9oOhi2WcFVjW1y77neoFQBp8mqzCsuiBdmeX-pkcCS/exec';
-var PRIZE  = 'Dispensador de Licor en Madera + Botella de Whiskey';
-var DATE   = '2 de mayo de 2026 - Loteria de Boyaca';
-var _o = ['5','7','3','2','4','6','8','6','0','2','0','9'].join('');
-
-var statuses    = {};
-var selectedNum = null;
-
-// ── INICIO ────────────────────────────────────────
-window.addEventListener('load', function() {
-  loadStatuses();
-  // Botón reservar
-  document.getElementById('btn-submit').addEventListener('click', function(e) {
-    e.preventDefault();
-    submitForm();
+/* CARGAR ESTADOS */
+function cargar(){
+  fetch(SCRIPT_URL + "?action=status")
+  .then(r=>r.json())
+  .then(d=>{
+    estados = d.data || {};
+    pintar();
   });
-  // Cerrar modal al hacer clic fuera
-  document.getElementById('overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-});
-
-// ── CARGAR ESTADOS (XMLHttpRequest) ───────────────
-function loadStatuses() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', SCRIPT_URL + '?action=status', true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      try {
-        var res = JSON.parse(xhr.responseText);
-        if (res.ok) statuses = res.data || {};
-      } catch(e) {}
-      buildGrid();
-    }
-  };
-  xhr.onerror = function() { buildGrid(); };
-  try { xhr.send(); } catch(e) { buildGrid(); }
 }
 
-// ── GRILLA ────────────────────────────────────────
-function buildGrid() {
-  var grid  = document.getElementById('grid');
-  var avail = 0;
-  grid.innerHTML = '';
-  for (var i = 0; i < 100; i++) {
-    var lbl    = i < 10 ? '0' + i : '' + i;
-    var estado = statuses[lbl] || 'available';
-    var btn    = document.createElement('button');
-    btn.className   = 'num-btn';
-    btn.textContent = lbl;
-    btn.type        = 'button';
-    if (estado === 'pagado') {
-      btn.classList.add('paid');
-      btn.disabled = true;
-      btn.title = 'Confirmado';
-      var tick = document.createElement('span');
-      tick.className = 'tick';
-      tick.textContent = '✓';
-      btn.appendChild(tick);
-    } else if (estado === 'pendiente') {
-      btn.classList.add('pending');
-      btn.disabled = true;
-      btn.title = 'Pendiente de pago';
-    } else {
-      avail++;
-      (function(num, b) {
-        b.addEventListener('click', function(e) {
-          e.preventDefault();
-          openModal(num);
-        });
-      })(lbl, btn);
+/* GRID */
+function pintar(){
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  for(let i=0;i<100;i++){
+    let n = i<10 ? "0"+i : ""+i;
+    let btn = document.createElement("button");
+    btn.className = "num-btn";
+    btn.textContent = n;
+
+    let est = estados[n];
+
+    if(est=="pagado"){
+      btn.classList.add("paid");
+      btn.disabled=true;
     }
+    else if(est=="pendiente"){
+      btn.classList.add("pending");
+      btn.disabled=true;
+    }
+    else{
+      btn.onclick = ()=>abrir(n);
+    }
+
     grid.appendChild(btn);
   }
-  document.getElementById('avail-count').textContent = avail;
-  document.getElementById('loading').style.display   = 'none';
-  document.getElementById('grid').style.display      = 'grid';
 }
 
-// ── MODAL ─────────────────────────────────────────
-function openModal(num) {
-  selectedNum = num;
-  document.getElementById('sel-num-display').textContent = num;
-  document.getElementById('sel-num-show').textContent    = num;
-  document.getElementById('form-panel').style.display    = '';
-  document.getElementById('success-panel').style.display = 'none';
-  document.getElementById('inp-nombre').value = '';
-  document.getElementById('inp-wa').value     = '';
-  document.getElementById('inp-correo').value = '';
-  hideErr();
-  document.getElementById('overlay').classList.add('show');
-  document.getElementById('sticky-bar').style.display = 'flex';
-  setTimeout(function() { document.getElementById('inp-nombre').focus(); }, 150);
+/* ABRIR MODAL */
+function abrir(n){
+  seleccionado = n;
+  document.getElementById("num").textContent = n;
+  document.getElementById("overlay").style.display="flex";
 }
 
-function closeModal() {
-  document.getElementById('overlay').classList.remove('show');
-}
+/* GUARDAR */
+function guardar(){
+  let nombre = document.getElementById("nombre").value.trim();
+  let wa = document.getElementById("wa").value.trim();
+  let correo = document.getElementById("correo").value.trim();
 
-// ── ENVIAR FORMULARIO ─────────────────────────────
-function submitForm() {
-  var nombre = document.getElementById('inp-nombre').value.trim();
-  var wa     = document.getElementById('inp-wa').value.trim().replace(/\D/g, '');
-  var correo = document.getElementById('inp-correo').value.trim();
+  if(!nombre || !wa){
+    alert("Completa nombre y WhatsApp");
+    return;
+  }
 
-  if (!nombre) { showErr('Por favor ingresa tu nombre completo.'); return; }
-  if (!wa || wa.length < 7) { showErr('Por favor ingresa un WhatsApp válido.'); return; }
-  if (!selectedNum) { showErr('No hay número seleccionado.'); return; }
-
-  var btnEl = document.getElementById('btn-submit');
-  btnEl.disabled    = true;
-  btnEl.textContent = '⏳ Reservando...';
-  hideErr();
-
-  var url = SCRIPT_URL
-    + '?action=register'
-    + '&numero=' + encodeURIComponent(selectedNum)
-    + '&nombre=' + encodeURIComponent(nombre)
-    + '&wa='     + encodeURIComponent(wa)
-    + '&correo=' + encodeURIComponent(correo);
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState !== 4) return;
-    btnEl.disabled    = false;
-    btnEl.textContent = 'Reservar mi número →';
-    try {
-      var res = JSON.parse(xhr.responseText);
-      if (res.ok) {
-        onSuccess(selectedNum, nombre, wa, correo);
-      } else {
-        showErr(res.msg || 'Ocurrió un error. Intenta de nuevo.');
-      }
-    } catch(e) {
-      showErr('Error de conexión. Verifica tu internet e intenta de nuevo.');
+  fetch(SCRIPT_URL + "?action=register"
+    +"&numero="+encodeURIComponent(seleccionado)
+    +"&nombre="+encodeURIComponent(nombre)
+    +"&wa="+encodeURIComponent(wa)
+    +"&correo="+encodeURIComponent(correo))
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.ok){
+      estados[seleccionado]="pendiente";
+      pintar();
+      document.getElementById("overlay").style.display="none";
+      alert("✅ Número reservado correctamente");
+    }else{
+      alert("Error: " + d.msg);
     }
-  };
-  xhr.onerror = function() {
-    btnEl.disabled    = false;
-    btnEl.textContent = 'Reservar mi número →';
-    showErr('Error de conexión. Verifica tu internet e intenta de nuevo.');
-  };
-  xhr.send();
-}
-
-// ── ÉXITO ─────────────────────────────────────────
-function onSuccess(num, nombre, wa, correo) {
-  statuses[num] = 'pendiente';
-  buildGrid();
-
-  var msgOrg = 'Nueva reserva - Rifa Premium\n'
-    + 'Numero: ' + num + '\n'
-    + 'Nombre: ' + nombre + '\n'
-    + 'WhatsApp: ' + wa + '\n'
-    + (correo ? 'Correo: ' + correo + '\n' : '')
-    + 'Estado: Pendiente de pago\n'
-    + 'Premio: ' + PRIZE + '\n'
-    + 'Sorteo: ' + DATE;
-
-  var msgSelf = 'Tu reserva fue registrada!\n'
-    + 'Numero: ' + num + '\n'
-    + 'Nombre: ' + nombre + '\n'
-    + 'Premio: ' + PRIZE + '\n'
-    + 'Sorteo: ' + DATE + '\n'
-    + 'Valor: $20.000\n'
-    + 'Estado: PENDIENTE DE PAGO\n'
-    + 'Envia tu comprobante al organizador para activar tu numero.';
-
-  var waOrg  = 'https://wa.me/' + _o + '?text=' + encodeURIComponent(msgOrg);
-  var waSelf = 'https://wa.me/57' + wa + '?text=' + encodeURIComponent(msgSelf);
-
-  document.getElementById('wa-org-btn').href          = waOrg;
-  document.getElementById('wa-self-btn').href         = waSelf;
-  document.getElementById('btn-wa').href              = waOrg;
-  document.getElementById('conf-num').textContent     = num;
-  document.getElementById('conf-nombre').textContent  = nombre;
-  document.getElementById('form-panel').style.display    = 'none';
-  document.getElementById('success-panel').style.display = '';
-}
-
-// ── HELPERS ───────────────────────────────────────
-function showErr(msg) {
-  var b = document.getElementById('err-box');
-  b.textContent = msg;
-  b.style.display = '';
-}
-function hideErr() {
-  document.getElementById('err-box').style.display = 'none';
+  });
 }
 </script>
+
 </body>
 </html>
