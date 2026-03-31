@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rifa Premium</title>
+
+<style>
+body{font-family:Arial;background:#EEF5FF;margin:0;text-align:center}
+
+header{
+  background:#1A6FD4;
+  color:white;
+  padding:40px;
+}
+
+h1{margin:0}
+
+#countdown{
+  font-size:20px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+img{
+  width:250px;
+  margin-top:20px;
+  border-radius:15px;
+}
+
+.stats{
+  margin:20px;
+  font-weight:bold;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:5px;
+  max-width:600px;
+  margin:20px auto;
+  background:white;
+  padding:15px;
+  border-radius:15px;
+}
+
+.num{
+  padding:10px;
+  border-radius:8px;
+  border:2px solid #C8E0FF;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.num:hover{background:#1A6FD4;color:white}
+
+.pendiente{
+  background:#FFF3E0;
+  color:#FF6B2B;
+  cursor:not-allowed;
+}
+
+.pagado{
+  background:#E8F5E9;
+  color:#17B86A;
+  cursor:not-allowed;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  background:#1A6FD4;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎟️ RIFA PREMIUM</h1>
+
+  <div id="countdown"></div>
+
+  <img src="dispensador_a.jpg">
+</header>
+
+<div class="stats">
+  Disponibles: <span id="disp">0</span> |
+  Pendientes: <span id="pend">0</span> |
+  Pagados: <span id="pag">0</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>Número <span id="num"></span></h3>
+    <input id="nombre" placeholder="Nombre">
+    <input id="wa" placeholder="WhatsApp">
+    <input id="correo" placeholder="Correo">
+    <button onclick="guardar()">Reservar</button>
+  </div>
+</div>
+
+<script>
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+
+var data = {};
+var seleccionado = null;
+
+var dispSpan = document.getElementById("disp");
+var pendSpan = document.getElementById("pend");
+var pagSpan  = document.getElementById("pag");
+
+/* CONTADOR */
+var targetDate = new Date("May 2, 2026 20:00:00").getTime();
+
+setInterval(function(){
+  var now = new Date().getTime();
+  var diff = targetDate - now;
+
+  if(diff < 0){
+    document.getElementById("countdown").innerHTML = "🎉 SORTEO EN CURSO";
+    return;
+  }
+
+  var d = Math.floor(diff / (1000*60*60*24));
+  var h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  var m = Math.floor((diff % (1000*60*60)) / (1000*60));
+  var s = Math.floor((diff % (1000*60)) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+    d+"d "+h+"h "+m+"m "+s+"s";
+},1000);
+
+/* INICIO */
+window.onload = function(){
+  cargar();
+};
+
+/* CARGAR */
+function cargar(){
+  fetch(SCRIPT_URL + "?action=status")
+  .then(r=>r.json())
+  .then(res=>{
+    data = res.data || {};
+
+    console.log(data); // DEBUG
+
+    pintar();
+  })
+  .catch(()=>{
+    alert("Error conectando con servidor");
+  });
+}
+
+/* GRID */
+function pintar(){
+  var g=document.getElementById("grid");
+  g.innerHTML="";
+
+  let disp=0, pend=0, pag=0;
+
+  for(let i=0;i<100;i++){
+    let n=i<10?"0"+i:i+"";
+    let btn=document.createElement("div");
+    btn.className="num";
+    btn.innerText=n;
+
+    let d = data[n] || null;
+
+    if(d){
+      btn.title=(d.nombre||"")+" | "+(d.wa||"");
+
+      if(d.estado=="pagado"){
+        btn.classList.add("pagado");
+        pag++;
+      }else{
+        btn.classList.add("pendiente");
+        pend++;
+      }
+    }else{
+      disp++;
+      btn.onclick=()=>abrir(n);
+    }
+
+    g.appendChild(btn);
+  }
+
+  dispSpan.innerText=disp;
+  pendSpan.innerText=pend;
+  pagSpan.innerText=pag;
+}
+
+/* ABRIR */
+function abrir(n){
+  seleccionado=n;
+  document.getElementById("num").innerText=n;
+  document.getElementById("overlay").style.display="flex";
+}
+
+/* GUARDAR */
+function guardar(){
+  let nombre=document.getElementById("nombre").value.trim();
+  let wa=document.getElementById("wa").value.trim();
+  let correo=document.getElementById("correo").value.trim();
+
+  if(!nombre || !wa){
+    alert("Completa nombre y WhatsApp");
+    return;
+  }
+
+  fetch(SCRIPT_URL + "?action=register"
+    +"&numero="+encodeURIComponent(seleccionado)
+    +"&nombre="+encodeURIComponent(nombre)
+    +"&wa="+encodeURIComponent(wa)
+    +"&correo="+encodeURIComponent(correo))
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.ok){
+      data[seleccionado]={estado:"pendiente",nombre:nombre,wa:wa,correo:correo};
+      pintar();
+      document.getElementById("overlay").style.display="none";
+      alert("✅ Número reservado");
+    }else{
+      alert(res.msg);
+    }
+  });
+}
+</script>
+
+</body>
+</html>
