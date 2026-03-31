@@ -4,115 +4,510 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin – Rifa Premium</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-body{font-family:Arial;background:#111;color:#fff;margin:0;padding:20px}
-.login{max-width:300px;margin:100px auto;text-align:center}
-input{width:100%;padding:10px;margin:10px 0}
-button{padding:10px;width:100%;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:20px}
-th,td{border:1px solid #444;padding:8px;text-align:left}
-th{background:#222}
-.btn{padding:5px 10px;margin:2px;cursor:pointer}
+:root{
+  --blue:#1A6FD4;--blue2:#2389FF;--blue3:#E8F3FF;--blue4:#C8E0FF;
+  --navy:#0D3B7A;--orange:#FF6B2B;--yellow:#FFD700;
+  --green:#17B86A;--green2:#0E9455;--green3:rgba(23,184,106,.15);
+  --amber:#b87333;--amber2:rgba(184,115,51,.15);
+  --red:#E03434;--red2:rgba(224,52,52,.15);
+  --bg:#EEF5FF;--bg2:#F7FAFF;--white:#fff;
+  --text:#0D2545;--text2:#3A5A8A;
+  --border:#B8D4F5;--shadow:0 4px 24px rgba(26,111,212,.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh}
+
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:linear-gradient(135deg,var(--navy),var(--blue))}
+.login-box{background:white;border-radius:20px;padding:48px 40px;max-width:380px;width:100%;
+  text-align:center;box-shadow:0 20px 60px rgba(13,59,122,.3)}
+.login-icon{font-size:2.8rem;margin-bottom:12px}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;
+  color:var(--navy);letter-spacing:.03em;margin-bottom:4px}
+.login-sub{color:var(--text2);font-size:.9rem;font-weight:600;margin-bottom:28px}
+.login-input{width:100%;background:var(--bg);border:2px solid var(--border);
+  border-radius:10px;padding:13px 16px;color:var(--text);font-size:1rem;
+  font-family:'Nunito',sans-serif;font-weight:700;outline:none;
+  text-align:center;letter-spacing:.15em;transition:border-color .2s}
+.login-input:focus{border-color:var(--blue)}
+.login-btn{width:100%;margin-top:14px;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:white;border:none;border-radius:40px;padding:13px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(26,111,212,.35)}
+.login-btn:hover{transform:scale(1.02)}
+.login-err{color:var(--red);font-size:.85rem;font-weight:700;
+  margin-top:10px;display:none;padding:8px;background:var(--red2);border-radius:8px}
+
+/* ADMIN */
+.admin{display:none;min-height:100vh}
+.topbar{background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:white;padding:14px 24px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 20px rgba(13,59,122,.3)}
+.topbar-brand{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
+  letter-spacing:.05em}
+.topbar-brand span{font-family:'Nunito',sans-serif;font-size:.72rem;
+  font-weight:700;opacity:.7;letter-spacing:.1em;margin-left:8px}
+.btn-logout{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  color:white;padding:7px 16px;border-radius:20px;
+  font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;
+  cursor:pointer;transition:all .2s}
+.btn-logout:hover{background:rgba(255,255,255,.25)}
+
+.content{padding:24px;max-width:1100px;margin:0 auto}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;margin-bottom:24px}
+.stat-card{background:white;border-radius:14px;padding:18px 16px;
+  text-align:center;border:1px solid var(--border);box-shadow:var(--shadow)}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1}
+.stat-lbl{font-size:.7rem;font-weight:700;letter-spacing:.1em;
+  color:var(--text2);text-transform:uppercase;margin-top:4px}
+.s-total .stat-num{color:var(--navy)}
+.s-paid  .stat-num{color:var(--green2)}
+.s-pend  .stat-num{color:var(--orange)}
+.s-avail .stat-num{color:var(--blue)}
+.s-money .stat-num{color:var(--green2);font-size:1.5rem}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{background:white;border:2px solid var(--border);color:var(--text2);
+  padding:7px 18px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--blue);
+  color:var(--blue);background:var(--blue3)}
+.btn-refresh{background:var(--navy);border:none;color:white;
+  padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;
+  margin-left:auto;display:flex;align-items:center;gap:6px}
+.btn-refresh:hover{background:var(--blue)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border);
+  box-shadow:var(--shadow);background:white}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+thead{background:var(--navy);color:white}
+th{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;padding:13px 14px;text-align:left}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--blue3)}
+
+.num-cell{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
+  color:var(--navy);letter-spacing:.05em}
+.badge-paid{display:inline-block;background:var(--green3);
+  border:1px solid var(--green);color:var(--green2);
+  font-size:.7rem;font-weight:800;padding:3px 10px;
+  border-radius:20px;text-transform:uppercase}
+.badge-pend{display:inline-block;background:var(--amber2);
+  border:1px solid var(--amber);color:var(--amber);
+  font-size:.7rem;font-weight:800;padding:3px 10px;
+  border-radius:20px;text-transform:uppercase}
+
+.action-btns{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.btn-pay{background:var(--green3);border:1px solid var(--green);color:var(--green2);
+  padding:5px 12px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.75rem;font-weight:800;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-pay:hover{background:rgba(23,184,106,.3)}
+.btn-unpay{background:var(--amber2);border:1px solid var(--amber);color:var(--amber);
+  padding:5px 12px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.75rem;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-unpay:hover{background:rgba(184,115,51,.3)}
+.btn-del{background:var(--red2);border:1px solid rgba(224,52,52,.4);color:var(--red);
+  padding:5px 10px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.72rem;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-del:hover{background:rgba(224,52,52,.25)}
+.btn-wa-sm{display:inline-block;background:rgba(37,211,102,.12);
+  border:1px solid rgba(37,211,102,.4);color:var(--green2);
+  padding:5px 10px;border-radius:20px;font-family:'Nunito',sans-serif;
+  font-size:.72rem;font-weight:800;cursor:pointer;text-decoration:none;
+  transition:all .2s;white-space:nowrap}
+.btn-wa-sm:hover{background:rgba(37,211,102,.25)}
+
+/* MINI GRID */
+.mini-section{margin-top:28px}
+.mini-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  color:var(--navy);letter-spacing:.03em;margin-bottom:14px}
+.mini-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;
+  font-size:.8rem;font-weight:700;color:var(--text2)}
+.mini-leg{display:flex;align-items:center;gap:6px}
+.mini-dot{width:13px;height:13px;border-radius:3px}
+.md-avail{background:white;border:2px solid var(--blue4)}
+.md-pend{background:#FFF3E0;border:2px solid var(--orange)}
+.md-paid{background:#E8F5E9;border:2px solid var(--green)}
+.mini-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-width:480px}
+.mg-cell{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800}
+.mg-avail{background:white;border:2px solid var(--blue4);color:var(--text2)}
+.mg-pend{background:#FFF3E0;border:2px solid var(--orange);color:var(--orange)}
+.mg-paid{background:#E8F5E9;border:2px solid var(--green);color:var(--green2)}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--text2);
+  font-weight:600;font-size:.95rem;line-height:1.8}
+.empty-icon{font-size:2.2rem;margin-bottom:8px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--navy);color:white;border-radius:12px;
+  padding:12px 22px;font-family:'Nunito',sans-serif;font-size:.85rem;
+  font-weight:700;box-shadow:0 8px 30px rgba(13,59,122,.3);
+  animation:slideUp .3s ease;display:none}
+.toast.ok{background:var(--green2)}
+.toast.err{background:var(--red)}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);
+  border-top-color:white;border-radius:50%;animation:spin .8s linear infinite}
+
+@media(max-width:640px){
+  .content{padding:12px}
+  th:nth-child(5),td:nth-child(5){display:none}
+}
 </style>
 </head>
-
 <body>
 
-<div id="login" class="login">
-  <h2>🔐 Admin Rifa</h2>
-  <input type="password" id="pwd" placeholder="Contraseña">
-  <button onclick="login()">Ingresar</button>
-  <p id="err" style="color:red;display:none">Contraseña incorrecta</p>
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-icon">🔐</div>
+    <p class="login-title">PANEL ADMIN</p>
+    <p class="login-sub">Rifa Premium · 2026</p>
+    <input class="login-input" type="password" id="pwd-input"
+      placeholder="••••••••" maxlength="40"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Ingresar →</button>
+    <div class="login-err" id="login-err">Contraseña incorrecta</div>
+  </div>
 </div>
 
-<div id="panel" style="display:none">
-  <h2>📊 Panel de Control</h2>
-  <button onclick="load()">🔄 Actualizar</button>
+<!-- ADMIN -->
+<div class="admin" id="admin">
+  <div class="topbar">
+    <div class="topbar-brand">
+      🎟️ RIFA ADMIN
+      <span>PANEL DE CONTROL</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">✕ Cerrar sesión</button>
+  </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Número</th>
-        <th>Nombre</th>
-        <th>WhatsApp</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="data"></tbody>
-  </table>
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card s-total"><div class="stat-num" id="s-total">—</div><div class="stat-lbl">Registros</div></div>
+      <div class="stat-card s-paid"> <div class="stat-num" id="s-paid">—</div><div class="stat-lbl">Pagados ✓</div></div>
+      <div class="stat-card s-pend"> <div class="stat-num" id="s-pend">—</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat-card s-avail"><div class="stat-num" id="s-avail">—</div><div class="stat-lbl">Disponibles</div></div>
+      <div class="stat-card s-money"><div class="stat-num" id="s-money">—</div><div class="stat-lbl">Recaudado</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('pendiente',this)">Pendientes</button>
+      <button class="filter-btn" onclick="setFilter('pagado',this)">Pagados</button>
+      <button class="btn-refresh" onclick="loadData()">
+        <span class="spin" id="spin" style="display:none"></span>
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Nombre</th><th>WhatsApp</th>
+            <th>Correo</th><th>Fecha</th><th>Estado</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Ingresa tu contraseña para ver los registros</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mini grid -->
+    <div class="mini-section">
+      <p class="mini-title">Mapa de números</p>
+      <div class="mini-legend">
+        <div class="mini-leg"><div class="mini-dot md-avail"></div>Disponible</div>
+        <div class="mini-leg"><div class="mini-dot md-pend"></div>Pendiente</div>
+        <div class="mini-leg"><div class="mini-dot md-paid"></div>Pagado</div>
+      </div>
+      <div class="mini-grid" id="mini-grid"></div>
+    </div>
+
+  </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWIa-F1eeETn6GbXvlHcQQtr9oOhi2WcFVjW1y77neoFQBp8mqzCsuiBdmeX-pkcCS/exec";
-var pwd = "";
+// ── CONFIGURACIÓN ─────────────────────────────────────────
+var SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT';
 
-function login(){
-  pwd = document.getElementById("pwd").value;
+var pwd       = '';
+var allRows   = [];
+var curFilter = 'all';
 
-  fetch(SCRIPT_URL + "?action=list&pwd=" + pwd)
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.ok){
-      document.getElementById("login").style.display="none";
-      document.getElementById("panel").style.display="block";
-      render(res.data);
-    }else{
-      document.getElementById("err").style.display="block";
+// ── LOGIN ─────────────────────────────────────────────────
+function doLogin() {
+  var p = document.getElementById('pwd-input').value.trim();
+  if (!p) return;
+  pwd = p;
+  var loginErr = document.getElementById('login-err');
+  loginErr.style.display = 'none';
+  apiCall('list', {}, function(res) {
+    if (res.ok) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin').style.display = '';
+      allRows = res.data || [];
+      renderAll();
+    } else {
+      pwd = '';
+      loginErr.style.display = '';
     }
   });
 }
 
-function load(){
-  fetch(SCRIPT_URL + "?action=list&pwd=" + pwd)
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.ok){
-      render(res.data);
+function doLogout() {
+  pwd = '';
+  document.getElementById('login-screen').style.display = '';
+  document.getElementById('admin').style.display = 'none';
+  document.getElementById('pwd-input').value = '';
+}
+
+// ── API CALL vía script tag (evita CORS) ──────────────────
+var _cbCount = 0;
+function apiCall(action, params, callback) {
+  var cbName = '_cb' + (++_cbCount);
+  var url = SCRIPT_URL + '?action=' + encodeURIComponent(action)
+    + '&pwd=' + encodeURIComponent(pwd);
+  for (var k in params) {
+    url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }
+  url += '&callback=' + cbName;
+
+  window[cbName] = function(data) {
+    delete window[cbName];
+    var tag = document.getElementById(cbName);
+    if (tag) tag.parentNode.removeChild(tag);
+    callback(data);
+  };
+
+  // Fallback: si JSONP no responde en 8s usar XHR normal
+  var timer = setTimeout(function() {
+    if (window[cbName]) {
+      // Intentar con XHR directo
+      var xhr = new XMLHttpRequest();
+      var plainUrl = SCRIPT_URL + '?action=' + encodeURIComponent(action)
+        + '&pwd=' + encodeURIComponent(pwd);
+      for (var k in params) {
+        plainUrl += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      }
+      xhr.open('GET', plainUrl, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        delete window[cbName];
+        try {
+          callback(JSON.parse(xhr.responseText));
+        } catch(e) {
+          callback({ ok: false, msg: 'Error de conexion' });
+        }
+      };
+      xhr.onerror = function() {
+        delete window[cbName];
+        callback({ ok: false, msg: 'Error de conexion' });
+      };
+      xhr.send();
+    }
+  }, 8000);
+
+  var script = document.createElement('script');
+  script.id  = cbName;
+  script.src = url;
+  script.onerror = function() {
+    clearTimeout(timer);
+    delete window[cbName];
+    // Intentar XHR como fallback inmediato
+    var xhr = new XMLHttpRequest();
+    var plainUrl = SCRIPT_URL + '?action=' + encodeURIComponent(action)
+      + '&pwd=' + encodeURIComponent(pwd);
+    for (var k in params) {
+      plainUrl += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }
+    xhr.open('GET', plainUrl, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== 4) return;
+      try { callback(JSON.parse(xhr.responseText)); }
+      catch(e) { callback({ ok: false, msg: 'Error' }); }
+    };
+    xhr.onerror = function() { callback({ ok: false, msg: 'Error de conexion' }); };
+    xhr.send();
+  };
+  document.body.appendChild(script);
+}
+
+// ── CARGAR DATOS ──────────────────────────────────────────
+function loadData() {
+  document.getElementById('spin').style.display = 'inline-block';
+  apiCall('list', {}, function(res) {
+    document.getElementById('spin').style.display = 'none';
+    if (res.ok) {
+      allRows = res.data || [];
+      renderAll();
+      toast('✓ Datos actualizados', 'ok');
+    } else {
+      toast('Error: ' + res.msg, 'err');
     }
   });
 }
 
-function render(data){
-  var html="";
-  data.forEach(r=>{
-    html+=`
-    <tr>
-      <td>${r.numero}</td>
-      <td>${r.nombre}</td>
-      <td>${r.wa}</td>
-      <td>${r.estado}</td>
-      <td>
-        ${r.estado==="pendiente"
-          ? `<button class="btn" onclick="pay('${r.id}')">✅ Pagado</button>`
-          : `<button class="btn" onclick="unpay('${r.id}')">↩ Revertir</button>`}
-        <button class="btn" onclick="del('${r.id}')">❌</button>
-      </td>
-    </tr>`;
+// ── RENDER ────────────────────────────────────────────────
+function renderAll() {
+  updateStats();
+  renderTable();
+  renderMiniGrid();
+}
+
+function updateStats() {
+  var paid  = allRows.filter(function(r){ return r.estado==='pagado'; }).length;
+  var pend  = allRows.filter(function(r){ return r.estado==='pendiente'; }).length;
+  var avail = 100 - allRows.length;
+  document.getElementById('s-total').textContent = allRows.length;
+  document.getElementById('s-paid').textContent  = paid;
+  document.getElementById('s-pend').textContent  = pend;
+  document.getElementById('s-avail').textContent = avail < 0 ? 0 : avail;
+  document.getElementById('s-money').textContent = '$' + (paid * 20000).toLocaleString('es-CO');
+}
+
+function setFilter(f, el) {
+  curFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  var rows = curFilter === 'all' ? allRows
+    : allRows.filter(function(r){ return r.estado === curFilter; });
+
+  rows = rows.slice().sort(function(a,b){
+    if (a.estado==='pendiente' && b.estado!=='pendiente') return -1;
+    if (a.estado!=='pendiente' && b.estado==='pendiente') return 1;
+    return a.numero.localeCompare(b.numero);
   });
 
-  document.getElementById("data").innerHTML = html;
+  var tbody = document.getElementById('tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📋</div>No hay registros</div></td></tr>';
+    return;
+  }
+
+  var html = '';
+  rows.forEach(function(r) {
+    var badge  = r.estado==='pagado'
+      ? '<span class="badge-paid">✓ Pagado</span>'
+      : '<span class="badge-pend">⏳ Pendiente</span>';
+
+    var waNum = r.wa.replace(/\D/g,'');
+    var waMsg = 'Hola ' + r.nombre + ', tu numero ' + r.numero + ' de la Rifa Premium esta '
+      + (r.estado==='pagado' ? 'CONFIRMADO y jugara el 2 de mayo!' : 'pendiente de pago. Por favor realiza tu transferencia.');
+    var waHref = 'https://wa.me/57' + waNum + '?text=' + encodeURIComponent(waMsg);
+
+    var acciones = '';
+    if (r.estado === 'pendiente') {
+      acciones += '<button class="btn-pay" onclick="markPaid(\'' + esc(r.id) + '\')">✓ Confirmar pago</button>';
+    } else {
+      acciones += '<button class="btn-unpay" onclick="markUnpay(\'' + esc(r.id) + '\')">↩ Revertir</button>';
+    }
+    if (waNum.length >= 7) {
+      acciones += '<a class="btn-wa-sm" href="' + waHref + '" target="_blank">📲 WA</a>';
+    }
+    acciones += '<button class="btn-del" onclick="delRow(\'' + esc(r.id) + '\')" title="Eliminar">✕</button>';
+
+    html += '<tr>'
+      + '<td class="num-cell">' + esc(r.numero) + '</td>'
+      + '<td style="font-weight:700">' + esc(r.nombre) + '</td>'
+      + '<td><a href="https://wa.me/57' + waNum + '" target="_blank" style="color:var(--green2);font-weight:700;text-decoration:none">' + esc(r.wa) + '</a></td>'
+      + '<td style="color:var(--text2);font-size:.85rem">' + esc(r.correo||'—') + '</td>'
+      + '<td style="color:var(--text2);font-size:.78rem;font-weight:700">' + esc(r.fecha) + '</td>'
+      + '<td>' + badge + '</td>'
+      + '<td><div class="action-btns">' + acciones + '</div></td>'
+      + '</tr>';
+  });
+  tbody.innerHTML = html;
 }
 
-function pay(id){
-  fetch(SCRIPT_URL + "?action=pay&id="+id+"&pwd="+pwd)
-  .then(r=>r.json())
-  .then(()=>load());
+function renderMiniGrid() {
+  var map = {};
+  allRows.forEach(function(r){ map[r.numero] = r.estado; });
+  var grid = document.getElementById('mini-grid');
+  grid.innerHTML = '';
+  for (var i = 0; i < 100; i++) {
+    var lbl = i < 10 ? '0'+i : ''+i;
+    var st  = map[lbl] || 'avail';
+    var cls = st==='pagado' ? 'mg-cell mg-paid' : st==='pendiente' ? 'mg-cell mg-pend' : 'mg-cell mg-avail';
+    var d   = document.createElement('div');
+    d.className   = cls;
+    d.textContent = lbl;
+    d.title       = lbl + ': ' + (st==='avail'?'Disponible':st);
+    grid.appendChild(d);
+  }
 }
 
-function unpay(id){
-  fetch(SCRIPT_URL + "?action=unpay&id="+id+"&pwd="+pwd)
-  .then(r=>r.json())
-  .then(()=>load());
+// ── ACCIONES ──────────────────────────────────────────────
+function markPaid(id) {
+  apiCall('pay', { id: id }, function(res) {
+    if (res.ok) {
+      allRows.forEach(function(r){ if(r.id===id) r.estado='pagado'; });
+      renderAll(); toast('✓ Pago confirmado', 'ok');
+    } else { toast('Error: ' + res.msg, 'err'); }
+  });
 }
 
-function del(id){
-  fetch(SCRIPT_URL + "?action=delete&id="+id+"&pwd="+pwd)
-  .then(r=>r.json())
-  .then(()=>load());
+function markUnpay(id) {
+  if (!confirm('¿Revertir a pendiente de pago?')) return;
+  apiCall('unpay', { id: id }, function(res) {
+    if (res.ok) {
+      allRows.forEach(function(r){ if(r.id===id) r.estado='pendiente'; });
+      renderAll(); toast('↩ Revertido', 'ok');
+    } else { toast('Error: ' + res.msg, 'err'); }
+  });
+}
+
+function delRow(id) {
+  if (!confirm('¿Eliminar este registro? No se puede deshacer.')) return;
+  apiCall('delete', { id: id }, function(res) {
+    if (res.ok) {
+      allRows = allRows.filter(function(r){ return r.id !== id; });
+      renderAll(); toast('🗑️ Registro eliminado', 'ok');
+    } else { toast('Error: ' + res.msg, 'err'); }
+  });
+}
+
+// ── HELPERS ───────────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast ' + (type||'');
+  t.style.display = '';
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.style.display='none'; }, 3000);
 }
 </script>
-
 </body>
 </html>
