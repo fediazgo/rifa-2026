@@ -57,6 +57,25 @@ header h1 span{color:var(--yellow)}
   opacity:.92;margin-bottom:28px;line-height:1.3}
 .header-sub strong{color:var(--yellow)}
 
+
+
+.countdown-box{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.count-title{
+  font-weight:800;
+  color:#FF6B2B;
+  margin-bottom:6px;
+}
+
+#countdown{
+  font-size:1.5rem;
+  font-weight:900;
+  color:#0D3B7A;
+}
+
 /* PRIZE CARD en header */
 .prize-card{
   display:inline-flex;align-items:center;gap:16px;
@@ -70,6 +89,20 @@ header h1 span{color:var(--yellow)}
 .prize-lbl{font-size:.72rem;font-weight:700;letter-spacing:.15em;
   text-transform:uppercase;opacity:.75;margin-bottom:3px}
 .prize-name{font-size:clamp(1rem,2.5vw,1.35rem);font-weight:800;line-height:1.25}
+
+.prize-img{
+  width:85px;
+  height:85px;
+  object-fit:cover;
+  border-radius:14px;
+  border:2px solid rgba(255,255,255,.5);
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+}
+
+<div class="countdown-box">
+  <p class="count-title">⏳ SORTEO EN:</p>
+  <div id="countdown"></div>
+</div>
 
 /* CHIPS */
 .chips-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
@@ -199,6 +232,62 @@ header h1 span{color:var(--yellow)}
 .step-ttl{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:6px}
 .step-dsc{font-size:.88rem;color:var(--text2);line-height:1.55;font-weight:600}
 
+.premium-img-box{
+  position:relative;
+  text-align:center;
+  margin-top:-20px;
+  margin-bottom:30px;
+}
+
+.premium-img{
+  width:90%;
+  max-width:420px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  transition:transform .4s ease;
+}
+
+.premium-img:hover{
+  transform:scale(1.05);
+}
+
+/* EFECTO BRILLO */
+.shine{
+  position:absolute;
+  top:0;
+  left:-75%;
+  width:50%;
+  height:100%;
+  background:linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform:skewX(-25deg);
+  animation:shineMove 3s infinite;
+}
+
+@keyframes shineMove{
+  0%{ left:-75%; }
+  100%{ left:130%; }
+}
+
+/* BADGE */
+.badge-premium{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg,#FFD700,#FFAA00);
+  color:#000;
+  font-weight:900;
+  padding:6px 16px;
+  border-radius:20px;
+  font-size:.8rem;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+
 /* FOOTER */
 footer{
   background:var(--navy);color:rgba(255,255,255,.8);
@@ -235,6 +324,8 @@ footer strong{color:var(--yellow)}
   padding:4px 22px;border-radius:10px;letter-spacing:.05em}
 .modal-sub{font-size:.9rem;color:var(--text2);font-weight:600;margin-top:8px;line-height:1.4}
 
+
+
 /* FORM */
 .field{margin-bottom:14px}
 .field label{display:block;font-size:.78rem;font-weight:800;
@@ -263,6 +354,8 @@ footer strong{color:var(--yellow)}
   padding:10px 14px;margin-top:10px;font-size:.88rem;
   font-weight:700;color:var(--red);display:none;
 }
+
+
 
 /* SUCCESS */
 .success-panel{display:none}
@@ -343,13 +436,33 @@ footer strong{color:var(--yellow)}
   <h1>GRAN RIFA<br><span>PREMIUM</span></h1>
   <p class="header-sub">¡Gana un <strong>Dispensador de Licor en Madera</strong><br>+ Botella de Whiskey!</p>
 
-  <div class="prize-card">
-    <div class="prize-emoji">🥃</div>
-    <div class="prize-text">
-      <div class="prize-lbl">🏆 Premio único</div>
-      <div class="prize-name">Dispensador de Licor en Madera<br>+ Botella de Whiskey</div>
+<div class="prize-card">
+  <img src="img/dispensador_a.jpg" alt="Premio Rifa" class="prize-img">
+
+  <div class="prize-text">
+    <div class="prize-lbl">🏆 Premio único</div>
+    <div class="prize-name">
+      Dispensador de Licor en Madera<br>+ Botella de Whiskey
     </div>
   </div>
+</div>
+
+
+<div style="text-align:center;margin-top:-20px;margin-bottom:30px;">
+  <img src="img/dispensador_a.jpg" style="
+    width:90%;
+    max-width:420px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+  ">
+</div>
+
+<div class="premium-img-box">
+  <img src="img/dispensador_a.jpg" class="premium-img">
+  <div class="shine"></div>
+  <div class="badge-premium">🔥 PREMIO MAYOR</div>
+</div>
+
 
   <div class="chips-row">
     <div class="chip">
@@ -485,7 +598,8 @@ footer strong{color:var(--yellow)}
         <input type="email" id="inp-correo" placeholder="tu@correo.com" maxlength="80">
       </div>
       <div class="err-box" id="err-box"></div>
-      <button class="btn-submit" id="btn-submit" onclick="submitForm()">
+      <button class="btn-submit" id="btn-submit"></button>
+      <!--<button class="btn-submit" id="btn-submit" onclick="submitForm()">-->
         Reservar mi número →
       </button>
     </div>
