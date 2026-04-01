@@ -192,6 +192,49 @@ button{
  opacity:1;
  transform:translateX(-50%) translateY(0);
 }
+
+.leyenda{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:12px;
+ margin:15px 0;
+ font-size:13px;
+}
+
+.leyenda .item{
+ display:flex;
+ align-items:center;
+ gap:6px;
+ background:#fff;
+ padding:6px 10px;
+ border-radius:10px;
+ box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.box{
+ width:15px;
+ height:15px;
+ border-radius:4px;
+ display:inline-block;
+ border:1px solid #ccc;
+}
+
+.box.libre{
+ background:#fff;
+}
+
+.box.seleccionado{
+ background:#2c6e2e;
+}
+
+.box.reservado{
+ background:#ffd966;
+}
+
+.box.pagado{
+ background:#e53935;
+}
 </style>
 </head>
 
@@ -206,7 +249,7 @@ button{
 🎯 Disponibles: <span id="disponibles">100</span> / 100
 </p>
 
-<p id="loading">⏳ Cargando números...</p>
+<h3><p id="loading">⏳ Cargando números...</p></h3>
 
 <div class="numbers-grid" id="grid"></div>
 
@@ -242,6 +285,22 @@ function actualizarContador(stats){
         document.getElementById("disponibles").innerText = stats.disponibles;
     }
 }
+
+<div class="leyenda">
+  <div class="item">
+    <span class="box libre"></span> Disponible
+  </div>
+  <div class="item">
+    <span class="box seleccionado"></span> Seleccionado
+  </div>
+  <div class="item">
+    <span class="box reservado"></span> Reservado
+  </div>
+  <div class="item">
+    <span class="box pagado"></span> Pagado
+  </div>
+</div>
+
 
 // 🔒 validación
 function isTaken(num){
