@@ -1,613 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Rifa Premium - Dispensador de Licor + Whiskey | Lotería de Boyacá</title>
-    <!-- Fuentes modernas -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (gratuita) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rifa Premium</title>
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #f8f5f0 0%, #ede7dd 100%);
-            color: #2c241a;
-            padding: 1.5rem;
-            min-height: 100vh;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-        /* Contenedor principal */
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+<style>
+body{font-family:Inter;background:#f5f1ea;text-align:center;padding:20px}
 
-        /* Header / Hero */
-        .hero {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
+.numbers-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(70px,1fr));
+ gap:10px;
+ max-width:600px;
+ margin:auto
+}
 
-        .badge-date {
-            display: inline-block;
-            background: #c17b2e;
-            color: white;
-            font-weight: 700;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+.numero{
+ padding:12px;
+ border-radius:12px;
+ background:#fff;
+ border:2px solid #ddd;
+ cursor:pointer;
+ font-weight:700;
+ transition:.2s;
+}
 
-        h1 {
-            font-size: 2.7rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #2c241a, #5e3a1c);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
-        }
+.numero:hover{transform:scale(1.05)}
 
-        .subhead {
-            font-size: 1.2rem;
-            color: #5a4a34;
-            max-width: 650px;
-            margin: 0 auto;
-            font-weight: 500;
-        }
+.numero.selected{background:#2c6e2e;color:#fff}
+.numero.reservado{background:#ffd966;color:#000}
+.numero.pagado{background:#e53935;color:#fff}
 
-        .prize-card {
-            background: white;
-            border-radius: 40px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 1.8rem;
-            border: 1px solid rgba(193, 123, 46, 0.3);
-        }
-
-        .prize-icon {
-            font-size: 4rem;
-            background: #fbe9d2;
-            width: 100px;
-            height: 100px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b45f1b;
-        }
-
-        .prize-text h2 {
-            font-size: 1.9rem;
-            font-weight: 800;
-            color: #2c241a;
-        }
-
-        .prize-text p {
-            font-size: 1rem;
-            color: #6b4c2c;
-            font-weight: 500;
-        }
-
-        .price-tag {
-            background: #2c241a;
-            padding: 0.5rem 1.5rem;
-            border-radius: 60px;
-            color: #ffd966;
-            font-weight: 800;
-            font-size: 1.4rem;
-        }
-
-        /* Grid de números */
-        .numbers-section {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(2px);
-            border-radius: 48px;
-            padding: 1.8rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px dashed #e0cfbc;
-            padding-bottom: 0.8rem;
-        }
-
-        .section-title h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .selected-counter {
-            background: #2c241a;
-            color: #f7e5c2;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-        }
-
-        .numbers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-            gap: 12px;
-        }
-
-        .numero {
-            background: white;
-            border-radius: 20px;
-            text-align: center;
-            padding: 12px 5px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 2px solid #e2d4c6;
-            color: #3a2c1e;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .numero:hover {
-            transform: translateY(-3px);
-            border-color: #c17b2e;
-            background: #fffaf2;
-        }
-
-        .numero.selected {
-            background: #2c6e2e;
-            border-color: #ffd966;
-            color: white;
-            box-shadow: 0 8px 18px rgba(44,110,46,0.3);
-        }
-
-        .numero.reserved {
-            background: #d9cfc0;
-            border-color: #a0896b;
-            color: #5e4a32;
-            text-decoration: line-through;
-            cursor: not-allowed;
-            opacity: 0.6;
-            filter: grayscale(0.05);
-        }
-
-        /* panel de resumen */
-        .cart-panel {
-            background: white;
-            border-radius: 32px;
-            padding: 1.8rem;
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
-            margin-top: 0.5rem;
-            border: 1px solid #f0e2d2;
-        }
-
-        .flex-summary {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .total-box {
-            background: #f4efe8;
-            border-radius: 28px;
-            padding: 0.8rem 1.5rem;
-        }
-
-        .total-label {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .total-price {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #c17b2e;
-            line-height: 1;
-        }
-
-        .btn-whatsapp {
-            background: #25D366;
-            border: none;
-            padding: 1rem 2.2rem;
-            border-radius: 60px;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 8px 18px rgba(37,211,102,0.3);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .btn-whatsapp:hover {
-            background: #128C7E;
-            transform: scale(1.02);
-        }
-
-        .btn-whatsapp:disabled {
-            background: #b0b6a3;
-            box-shadow: none;
-            cursor: default;
-            transform: none;
-        }
-
-        .selected-list {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #4a3b2a;
-            background: #fbf7f0;
-            padding: 0.8rem 1.2rem;
-            border-radius: 28px;
-            display: inline-block;
-        }
-
-        .info-footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.8rem;
-            color: #7c6b53;
-        }
-
-        @media (max-width: 700px) {
-            body {
-                padding: 1rem;
-            }
-            h1 {
-                font-size: 1.9rem;
-            }
-            .numbers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 8px;
-            }
-            .btn-whatsapp {
-                padding: 0.8rem 1.6rem;
-                font-size: 1rem;
-            }
-            .total-price {
-                font-size: 1.6rem;
-            }
-        }
-
-        .toast-msg {
-            visibility: hidden;
-            min-width: 220px;
-            background-color: #2c241a;
-            color: #fff3e0;
-            text-align: center;
-            border-radius: 50px;
-            padding: 12px 20px;
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .toast-msg.show {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style>
+button{
+ margin-top:20px;
+ padding:12px 25px;
+ border:none;
+ border-radius:20px;
+ background:#25D366;
+ color:#fff;
+ font-weight:700;
+ cursor:pointer
+}
+</style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="hero">
-        <span class="badge-date"><i class="fas fa-calendar-alt"></i> Sorteo: 2 de Mayo 2026 - Lotería de Boyacá</span>
-        <h1>Rifa del Dispensador <br> + Whiskey Premium</h1>
-        <p class="subhead">100 números únicos • 20.000 COP c/u • Juega con la suerte de Boyacá</p>
-    </div>
+<h1>🎟 Rifa Dispensador + Whiskey</h1>
+<p>$20.000 COP - Lotería de Boyacá - 2 Mayo 2026</p>
 
-    <div class="prize-card">
-        <div class="prize-icon">
-            <i class="fas fa-wine-bottle"></i>
-        </div>
-        <div class="prize-text">
-            <h2>✨ Dispensador de licor en madera + Botella de Whiskey ✨</h2>
-            <p>Elegante set para los amantes del buen whiskey. Sorteo oficial con la Lotería de Boyacá.</p>
-        </div>
-        <div class="price-tag">
-            <i class="fas fa-tag"></i> $20.000 c/u
-        </div>
-    </div>
+<p style="font-weight:600;">
+🎯 Disponibles: <span id="disponibles">100</span> / 100
+</p>
 
-    <div class="numbers-section">
-        <div class="section-title">
-            <h3><i class="fas fa-hashtag"></i> Elige tus números de la suerte</h3>
-            <div class="selected-counter" id="selectedCounter">0 / 100 seleccionados</div>
-        </div>
-        <div class="numbers-grid" id="numbersGrid"></div>
-    </div>
+<div class="numbers-grid" id="grid"></div>
 
-    <div class="cart-panel">
-        <div class="flex-summary">
-            <div>
-                <div class="total-box">
-                    <div class="total-label">Total a pagar</div>
-                    <div class="total-price" id="totalPriceDisplay">$0 COP</div>
-                </div>
-                <div class="selected-list" id="selectedNumbersList">
-                    <i class="fas fa-star-of-life"></i> Ningún número seleccionado
-                </div>
-            </div>
-            <button class="btn-whatsapp" id="whatsappBtn">
-                <i class="fab fa-whatsapp fa-lg"></i> Reservar y enviar mensaje
-            </button>
-        </div>
-        <div class="info-footer" style="margin-top: 1rem; text-align: left; font-size: 0.75rem;">
-            <i class="fas fa-shield-alt"></i> Cada número es único. Al hacer clic, se generará un pedido por WhatsApp con los números elegidos.
-        </div>
-    </div>
-    <div class="info-footer">
-        <i class="fas fa-gavel"></i> Juega con responsabilidad. Dispensador de madera + Whiskey. Fecha: 2 de Mayo 2026 / Lotería de Boyacá.
-    </div>
-</div>
+<button onclick="sendWhatsApp()">Reservar por WhatsApp</button>
 
-<div id="toastMsg" class="toast-msg">✨ Números agregados correctamente</div>
+<p style="margin-top:15px; font-size:14px; color:#555;">
+🔒 Reserva segura • Pago por Nequi / Daviplata • Sorteo con la Lotería de Boyacá  
+</p>
 
 <script>
-    // ---------- CONFIGURACIÓN DE LA RIFA ----------
-    const TOTAL_NUMEROS = 100;
-    const PRECIO_UNITARIO = 20000;       // 20.000 COP
-    const FECHA_SORTEO = "2 de mayo de 2026";
-    const LOTERIA = "Lotería de Boyacá";
-    const PREMIO = "Dispensador de licor en madera + Botella de Whiskey";
+const API_URL = "https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+const WHATSAPP_NUMBER = "3246860209";
+const PRECIO_UNITARIO = 20000;
 
-    // NUMERO DE WHATSAPP OCULTO EN EL CODIGO, NO SE MUESTRA EN EL TEXTO VISIBLE DEL DOM
-    // Se maneja mediante una variable ofuscada en JavaScript pero nunca se imprime en el HTML textual.
-    // Para máxima seguridad, lo almacenamos en una constante y se usa solo en el enlace de WhatsApp.
-    const WHATSAPP_NUMBER = "3246860209";   // Número colombiano, sin el +57 para enlace estándar
+let estados = {};
+let selectedNumbers = [];
 
-    // Simulación de "números reservados" (puedes inicializar vacío, pero podrías marcar algunos como ocupados si es necesario)
-    // Por defecto todos están disponibles. En una situación real se sincronizaría con BD, pero para demo:
-    let reservedNumbers = [];     // array con números que ya no están disponibles (ej: 7, 24, 58 si alguien ya compró)
-    // Si deseas pre-marcar algunos como ocupados para mostrar funcionalidad, descomenta siguiente línea:
-    // reservedNumbers = [12, 34, 56, 78, 99];
-    
-    // Almacenar números seleccionados por el usuario actual
-    let selectedNumbers = [];   // lista de números elegidos (enteros)
+// 🔄 Cargar estados
+async function cargarEstados(){
+    const res = await fetch(API_URL + "?action=status");
+    const json = await res.json();
 
-    // Referencias DOM
-    const numbersGrid = document.getElementById('numbersGrid');
-    const selectedCounterSpan = document.getElementById('selectedCounter');
-    const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-    const selectedNumbersListDiv = document.getElementById('selectedNumbersList');
-    const whatsappBtn = document.getElementById('whatsappBtn');
-    const toastMsgDiv = document.getElementById('toastMsg');
-
-    // Funciones auxiliares
-    function showToast(message, duration = 2200) {
-        toastMsgDiv.textContent = message || "✅ Listo";
-        toastMsgDiv.classList.add('show');
-        setTimeout(() => {
-            toastMsgDiv.classList.remove('show');
-        }, duration);
+    if(json.ok){
+        estados = json.data;
+        actualizarContador(json.stats);
+        pintar();
     }
+}
 
-    function updateSummary() {
-        const count = selectedNumbers.length;
-        const total = count * PRECIO_UNITARIO;
-        selectedCounterSpan.innerText = `${count} / ${TOTAL_NUMEROS} seleccionados`;
-        totalPriceDisplay.innerText = `$${total.toLocaleString('es-CO')} COP`;
-        
-        if (count === 0) {
-            selectedNumbersListDiv.innerHTML = `<i class="fas fa-star-of-life"></i> Ningún número seleccionado`;
-        } else {
-            const sorted = [...selectedNumbers].sort((a,b)=>a-b);
-            const numerosStr = sorted.join(', ');
-            selectedNumbersListDiv.innerHTML = `<i class="fas fa-ticket-alt"></i> Tus números: <strong>${numerosStr}</strong> (${count} boletos)`;
+// 🎯 contador
+function actualizarContador(stats){
+    if(stats){
+        document.getElementById("disponibles").innerText = stats.disponibles;
+    }
+}
+
+// 🔒 validación
+function isTaken(num){
+    return estados[num] && estados[num].estado !== "liberado";
+}
+
+// 🎨 pintar grid
+function pintar(){
+    let g = document.getElementById("grid");
+    g.innerHTML = "";
+
+    for(let i=1;i<=100;i++){
+        let div = document.createElement("div");
+        div.className="numero";
+        div.innerText=i;
+
+        if(estados[i]){
+            if(estados[i].estado==="pendiente") div.classList.add("reservado");
+            if(estados[i].estado==="pagado") div.classList.add("pagado");
         }
-        // Habilitar/deshabilitar botón según si hay selección
-        whatsappBtn.disabled = (count === 0);
-    }
-
-    // Verificar si un número está reservado (vendido a otra persona)
-    function isReserved(num) {
-        return reservedNumbers.includes(num);
-    }
-
-    // Verificar si está seleccionado por el usuario actual
-    function isSelectedByUser(num) {
-        return selectedNumbers.includes(num);
-    }
-
-    // Marcar/desmarcar número (si no está reservado)
-    function toggleNumero(numero) {
-        if (isReserved(numero)) {
-            showToast(`⚠️ El número ${numero} ya está reservado (no disponible)`, 1500);
-            return false;
+        else if(selectedNumbers.includes(i)){
+            div.classList.add("selected");
         }
-        
-        const idx = selectedNumbers.indexOf(numero);
-        if (idx === -1) {
-            // agregar
-            if (selectedNumbers.length >= TOTAL_NUMEROS) {
-                showToast(`❌ Todos los números están ocupados`, 1500);
-                return false;
+
+        if(!isTaken(i)){
+            div.onclick=()=>{
+                let idx = selectedNumbers.indexOf(i);
+                if(idx===-1) selectedNumbers.push(i);
+                else selectedNumbers.splice(idx,1);
+                pintar();
             }
-            selectedNumbers.push(numero);
-            showToast(`🎉 Número ${numero} agregado!`, 800);
-        } else {
-            // quitar
-            selectedNumbers.splice(idx, 1);
-            showToast(`🗑️ Número ${numero} removido`, 800);
         }
-        updateSummary();
-        renderNumbersGrid();
+
+        g.appendChild(div);
+    }
+}
+
+// 📲 mensaje PRO
+function buildWhatsAppMessage() {
+    const lista = selectedNumbers.join(", ");
+    const total = selectedNumbers.length * PRECIO_UNITARIO;
+
+    let mensaje = `🎟️ RIFA DISPENSADOR + WHISKEY 🎟️\n`;
+    mensaje += `\n🔢 Números: ${lista}`;
+    mensaje += `\n💰 Total: $${total.toLocaleString('es-CO')} COP`;
+    mensaje += `\n📅 Sorteo: 2 de mayo - Lotería de Boyacá`;
+    mensaje += `\n\n✅ Solicito reservar estos números`;
+    mensaje += `\n💳 Pago por Nequi / Daviplata`;
+
+    return encodeURIComponent(mensaje);
+}
+
+// 🚀 enviar
+async function sendWhatsApp(){
+    if(selectedNumbers.length===0){
+        alert("Selecciona números");
+        return;
     }
 
-    // Renderizar la cuadrícula completa (100 números)
-    function renderNumbersGrid() {
-        numbersGrid.innerHTML = '';
-        for (let i = 1; i <= TOTAL_NUMEROS; i++) {
-            const numeroDiv = document.createElement('div');
-            numeroDiv.classList.add('numero');
-            numeroDiv.textContent = i;
-            
-            if (isReserved(i)) {
-                numeroDiv.classList.add('reserved');
-                numeroDiv.style.cursor = 'not-allowed';
-                numeroDiv.title = "Número ya vendido";
-            } else if (isSelectedByUser(i)) {
-                numeroDiv.classList.add('selected');
-                numeroDiv.title = "Click para quitar";
-            } else {
-                numeroDiv.title = "Seleccionar número";
-            }
-            
-            // Evento solo si no está reservado permanentemente
-            if (!isReserved(i)) {
-                numeroDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleNumero(i);
-                });
-            } else {
-                // Si está reservado, no permite interacción
-                numeroDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    showToast(`🔒 Número ${i} no disponible - ya fue vendido`, 1300);
-                });
-            }
-            numbersGrid.appendChild(numeroDiv);
-        }
+    let nombre = prompt("Tu nombre:");
+    let wa = prompt("Tu WhatsApp:");
+
+    if(!nombre||!wa){
+        alert("Datos obligatorios");
+        return;
     }
 
-    // Construir el mensaje de WhatsApp de manera elegante y SIN exponer el número en el HTML visible.
-    // El número se incrusta únicamente en el href generado en JS, pero no aparece en ningún texto visible.
-    function buildWhatsAppMessage() {
-        if (selectedNumbers.length === 0) return "";
-        
-        const numerosOrdenados = [...selectedNumbers].sort((a,b)=>a-b);
-        const listaNumeros = numerosOrdenados.join(', ');
-        const cantidad = selectedNumbers.length;
-        const valorTotal = cantidad * PRECIO_UNITARIO;
-        const valorFormateado = valorTotal.toLocaleString('es-CO');
-        
-        // Mensaje estructurado y atractivo
-        let mensaje = `🎟️ *SOLICITUD DE RESERVA - RIFA PREMIUM* 🎟️%0A`;
-        mensaje += `%0A✨ *Premio:* ${PREMIO}%0A`;
-        mensaje += `📅 *Sorteo:* ${FECHA_SORTEO} con ${LOTERIA}%0A`;
-        mensaje += `%0A🔢 *Números elegidos:* ${listaNumeros}%0A`;
-        mensaje += `🎫 *Cantidad:* ${cantidad} boletos%0A`;
-        mensaje += `💰 *Valor unitario:* $${PRECIO_UNITARIO.toLocaleString('es-CO')} COP%0A`;
-        mensaje += `💵 *Total a pagar:* $${valorFormateado} COP%0A`;
-        mensaje += `%0A✅ *Confirmo mi interés y procedo con el pago.* %0A`;
-        mensaje += `%0A📲 ¡Quedo atento/a a sus datos de consignación! Gracias.`;
-        
-        return mensaje;
-    }
+    // 🔒 registrar en backend
+    for(let num of selectedNumbers){
+        let res = await fetch(API_URL + "?action=register"
+            + "&numero="+num
+            + "&nombre="+encodeURIComponent(nombre)
+            + "&wa="+encodeURIComponent(wa)
+        );
 
-    // Evento de envío por WhatsApp (ocultando el número en el DOM)
-    function sendWhatsApp() {
-        if (selectedNumbers.length === 0) {
-            showToast("❌ Selecciona al menos un número antes de enviar", 1800);
+        let data = await res.json();
+
+        if(!data.ok){
+            alert(data.msg);
+            await cargarEstados();
             return;
         }
-        
-        const mensaje = buildWhatsAppMessage();
-        // Número oculto en el código: nunca se renderiza como texto dentro de la página (solo en el href)
-        // No hay ningún elemento HTML que muestre "3246860209" en pantalla.
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`;
-        
-        // Abrir WhatsApp en nueva pestaña
-        window.open(url, '_blank');
-        
-        // Opcional: feedback visual
-        showToast(`📱 Redirigiendo a WhatsApp con ${selectedNumbers.length} números`, 2000);
     }
 
-    // Inicializar datos, y si se desea, podríamos cargar reservas desde localStorage? No es necesario.
-    // Para demostración, podemos incluir algunos números reservados de ejemplo (simulación de vendidos).
-    // Pero lo dejamos a criterio, pero para que sea realista, mostraré algunos como "ocupados" para ejemplo visual.
-    // No afecta la lógica de selección. El organizador puede cambiar el array reservedNumbers.
-    function initDemoReserved() {
-        // Ejemplo: números 15, 42, 77 ya fueron vendidos a otros participantes
-        // Solo con fines demostrativos para que la interfaz muestre números bloqueados.
-        // En producción se llenaría desde base de datos.
-        if (reservedNumbers.length === 0) {
-            // Comentar si no quieres números ocupados de muestra
-            // reservedNumbers = [8, 16, 23, 44, 67, 88, 92];
-            // Se puede dejar vacío para rifa nueva. Descomentar si quieres mostrar ejemplo:
-            // reservedNumbers = [5, 19, 33, 57, 71, 84];
-        }
-    }
-    
-    // Función para inicializar todo
-    function init() {
-        initDemoReserved();   // puedes modificar los números reservados aquí o mantener vacío.
-        renderNumbersGrid();
-        updateSummary();
-        whatsappBtn.addEventListener('click', sendWhatsApp);
-        
-        // Bonus: El número de teléfono nunca es visible como texto en el HTML
-        // Validamos que no exista en ningún span/p/div el numero plano:
-        const bodyText = document.body.innerText;
-        if (bodyText.includes(WHATSAPP_NUMBER)) {
-            // Por seguridad, si por alguna razón se filtra en el futuro, pero este código asegura que no se imprime.
-            // En nuestro HTML no se imprime. Si se llegase a colocar accidentalmente, aquí podríamos advertir.
-            console.warn("El número aparece en el texto, pero revisa que no está presente en elementos visibles.");
-        }
-        // Adicional: si algún elemento de texto muestra el número, se puede ocultar, pero no es el caso.
-        // Además aseguramos que el número no está en ningún atributo de texto estático.
-    }
-    
-    init();
-    
-    // Exposición opcional para debug pero no interfiere
-    // Si el organizador quiere resetear selección (no necesario)
-    window.resetSelection = function() {
-        selectedNumbers = [];
-        updateSummary();
-        renderNumbersGrid();
-        showToast("Selección reiniciada", 1200);
-    };
-    
-    // Pequeño helper para administradores: podrían marcar un número como reservado externamente (consola)
-    window.markAsReserved = function(num) {
-        if (num >=1 && num <= TOTAL_NUMEROS && !reservedNumbers.includes(num)) {
-            if (selectedNumbers.includes(num)) {
-                // Si estaba seleccionado por el usuario actual, lo removemos de selección.
-                const idxUser = selectedNumbers.indexOf(num);
-                if (idxUser !== -1) selectedNumbers.splice(idxUser,1);
-                updateSummary();
-            }
-            reservedNumbers.push(num);
-            renderNumbersGrid();
-            showToast(`Número ${num} marcado como VENDIDO`, 1500);
-        } else {
-            showToast("Número inválido o ya reservado", 1200);
-        }
-    };
+    await cargarEstados();
+
+    let mensaje = buildWhatsAppMessage();
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`,"_blank");
+
+    alert("⏳ Tienes 2 horas para pagar o se liberan los números");
+
+    selectedNumbers=[];
+    pintar();
+}
+
+// 🔄 iniciar
+cargarEstados();
+setInterval(cargarEstados, 10000);
 </script>
+
 </body>
 </html>
