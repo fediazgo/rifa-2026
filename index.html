@@ -8,14 +8,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-body{font-family:Inter;background:#f5f1ea;text-align:center;padding:20px}
+body{
+ font-family:Inter;
+ background: linear-gradient(135deg, #0f2a5c, #1e4db7);
+ text-align:center;
+ padding:20px;
+ color:#fff;
+}
 
+/* PREMIO */
+.premio-img{
+ width:180px;
+ border-radius:20px;
+ box-shadow:0 15px 35px rgba(0,0,0,0.4);
+ transition:.3s;
+}
+.premio-img:hover{
+ transform:scale(1.08);
+}
+.premio-text{
+ color:#ffd966;
+ font-weight:600;
+ margin-top:8px;
+}
+
+/* GRID */
 .numbers-grid{
  display:grid;
  grid-template-columns:repeat(auto-fill,minmax(70px,1fr));
  gap:10px;
  max-width:600px;
- margin:auto
+ margin:auto;
+ background:#fff;
+ padding:15px;
+ border-radius:15px;
 }
 
 .numero{
@@ -26,14 +52,60 @@ body{font-family:Inter;background:#f5f1ea;text-align:center;padding:20px}
  cursor:pointer;
  font-weight:700;
  transition:.2s;
+ box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .numero:hover{transform:scale(1.05)}
 
-.numero.selected{background:#2c6e2e;color:#fff}
-.numero.reservado{background:#ffd966;color:#000}
-.numero.pagado{background:#e53935;color:#fff}
+.numero.selected{
+ background:#2c6e2e;
+ color:#fff;
+}
 
+.numero.reservado{
+ background:#ffd966;
+ color:#000;
+}
+
+.numero.pagado{
+ background:#e53935;
+ color:#fff;
+}
+
+/* LEYENDA */
+.leyenda{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:10px;
+ margin:15px auto;
+ max-width:600px;
+}
+
+.item{
+ display:flex;
+ align-items:center;
+ gap:6px;
+ background:#fff;
+ color:#000;
+ padding:6px 10px;
+ border-radius:10px;
+ font-size:13px;
+}
+
+.box{
+ width:15px;
+ height:15px;
+ border-radius:4px;
+ border:2px solid #ddd;
+}
+
+.libre{background:#fff}
+.seleccionado{background:#2c6e2e}
+.reservado{background:#ffd966}
+.pagado{background:#e53935}
+
+/* BOTON */
 button{
  margin-top:20px;
  padding:12px 25px;
@@ -45,44 +117,7 @@ button{
  cursor:pointer
 }
 
-.modal{
- display:none;
- position:fixed;
- top:0;left:0;
- width:100%;height:100%;
- background:rgba(0,0,0,0.6);
- justify-content:center;
- align-items:center;
-}
-
-.modal-content{
- background:#fff;
- padding:25px;
- border-radius:20px;
- width:90%;
- max-width:350px;
- text-align:center;
- box-shadow:0 10px 30px rgba(0,0,0,0.3);
-}
-
-.modal-content input{
- width:100%;
- padding:12px;
- margin:8px 0;
- border-radius:10px;
- border:1px solid #ccc;
-}
-
-.modal-content button{
- width:100%;
- margin-top:10px;
-}
-
-.close{
- background:#ccc;
- color:#000;
-}
-
+/* MODAL */
 .modal{
  display:none;
  position:fixed;
@@ -96,57 +131,19 @@ button{
 
 .modal-box{
  background:#fff;
+ color:#000;
  padding:25px;
  border-radius:20px;
  width:90%;
  max-width:380px;
- box-shadow:0 20px 40px rgba(0,0,0,0.3);
- animation:fadeIn .3s ease;
 }
 
-@keyframes fadeIn{
- from{transform:scale(0.9);opacity:0}
- to{transform:scale(1);opacity:1}
-}
-
-.modal-header{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:10px;
-}
-
-.modal-header h2{
- font-size:20px;
-}
-
-.modal-header span{
- cursor:pointer;
- font-size:18px;
-}
-
-.modal-sub{
- font-size:14px;
- color:#666;
- margin-bottom:15px;
-}
-
-.input-group{
- text-align:left;
- margin-bottom:10px;
-}
-
-.input-group label{
- font-size:13px;
- font-weight:600;
-}
-
+.input-group{margin-bottom:10px;text-align:left}
 .input-group input{
  width:100%;
  padding:10px;
  border-radius:10px;
  border:1px solid #ccc;
- margin-top:3px;
 }
 
 .resumen{
@@ -154,7 +151,6 @@ button{
  padding:10px;
  border-radius:10px;
  margin-top:10px;
- font-size:14px;
 }
 
 .btn-confirm{
@@ -166,9 +162,9 @@ button{
  width:100%;
  margin-top:15px;
  font-weight:700;
- cursor:pointer;
 }
 
+/* TOAST */
 .toast{
  position:fixed;
  bottom:30px;
@@ -176,326 +172,147 @@ button{
  transform:translateX(-50%) translateY(100px);
  background:#2c6e2e;
  color:white;
- padding:16px 22px;
+ padding:16px;
  border-radius:15px;
- font-size:14px;
- font-weight:500;
- box-shadow:0 10px 25px rgba(0,0,0,0.3);
  opacity:0;
- transition:all .4s ease;
- z-index:2000;
- max-width:90%;
- text-align:center;
+ transition:.4s;
 }
-
 .toast.show{
  opacity:1;
  transform:translateX(-50%) translateY(0);
 }
-
-.leyenda{
- display:flex;
- justify-content:center;
- flex-wrap:wrap;
- gap:12px;
- margin:15px 0;
- font-size:13px;
-}
-
-.leyenda .item{
- display:flex;
- align-items:center;
- gap:6px;
- background:#fff;
- padding:6px 10px;
- border-radius:10px;
- box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.box{
- width:15px;
- height:15px;
- border-radius:4px;
- display:inline-block;
- border:1px solid #ccc;
-}
-
-.box.libre{
- background:#fff;
-}
-
-.box.seleccionado{
- background:#2c6e2e;
-}
-
-.box.reservado{
- background:#ffd966;
-}
-
-.box.pagado{
- background:#e53935;
-}
 </style>
 </head>
 
-<div id="toast" class="toast"></div>
-
 <body>
 
-<h1>🎟 Rifa Dispensador + Whiskey</h1>
+<h2>🎟 Rifa Dispensador + Whiskey</h2>
 <p>$20.000 COP - Lotería de Boyacá - 2 Mayo 2026</p>
 
-<p style="font-weight:600;">
-🎯 Disponibles: <span id="disponibles">100</span> / 100
-</p>
+<img src="dispensador_a.jpg" class="premio-img">
+<p class="premio-text">Dispensador de licor en madera + Whiskey</p>
 
-<h3><p id="loading">⏳ Cargando números...</p></h3>
+<p><b>🎯 Disponibles: <span id="disponibles">100</span></b></p>
+
+<div class="leyenda">
+ <div class="item"><span class="box libre"></span> Libre</div>
+ <div class="item"><span class="box seleccionado"></span> Seleccionado</div>
+ <div class="item"><span class="box reservado"></span> Reservado</div>
+ <div class="item"><span class="box pagado"></span> Pagado</div>
+</div>
+
+<p id="loading">⏳ Cargando números...</p>
 
 <div class="numbers-grid" id="grid"></div>
 
-<button onclick="sendWhatsApp()">Reservar por WhatsApp</button>
+<button onclick="sendWhatsApp()">Reservar</button>
 
-<p style="margin-top:15px; font-size:14px; color:#555;">
-🔒 Reserva segura • Pago por Nequi / Daviplata • Sorteo con la Lotería de Boyacá  
-</p>
+<div id="toast" class="toast"></div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+ <div class="modal-box">
+  <h3>Completa tus datos</h3>
+
+  <div class="input-group">
+    <input type="text" id="nombre" placeholder="Nombre">
+  </div>
+  <div class="input-group">
+    <input type="text" id="wa" placeholder="WhatsApp">
+  </div>
+
+  <div class="resumen">
+    <p id="resumenNumeros"></p>
+    <p id="resumenTotal"></p>
+  </div>
+
+  <button class="btn-confirm" onclick="confirmarReserva()">Confirmar</button>
+ </div>
+</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
-const WHATSAPP_NUMBER = "3246860209";
-const PRECIO_UNITARIO = 20000;
+const API_URL="https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+const WHATSAPP_NUMBER="3246860209";
+const PRECIO=20000;
 
-let estados = {};
-let selectedNumbers = [];
+let estados={},selected=[];
 
-// 🔄 Cargar estados
-async function cargarEstados(){
-    const res = await fetch(API_URL + "?action=status");
-    const json = await res.json();
-
-    if(json.ok){
-        estados = json.data;
-        actualizarContador(json.stats);
-        pintar();
-    }
+async function cargar(){
+ let r=await fetch(API_URL+"?action=status");
+ let j=await r.json();
+ if(j.ok){
+  estados=j.data;
+  document.getElementById("disponibles").innerText=j.stats.disponibles;
+  pintar();
+  document.getElementById("loading").style.display="none";
+ }
 }
 
-// 🎯 contador
-function actualizarContador(stats){
-    if(stats){
-        document.getElementById("disponibles").innerText = stats.disponibles;
-    }
-}
-
-<div class="leyenda">
-  <div class="item">
-    <span class="box libre"></span> Disponible
-  </div>
-  <div class="item">
-    <span class="box seleccionado"></span> Seleccionado
-  </div>
-  <div class="item">
-    <span class="box reservado"></span> Reservado
-  </div>
-  <div class="item">
-    <span class="box pagado"></span> Pagado
-  </div>
-</div>
-
-
-// 🔒 validación
-function isTaken(num){
-    return estados[num] && estados[num].estado !== "liberado";
-}
-
-// 🎨 pintar grid
 function pintar(){
-    let g = document.getElementById("grid");
-    g.innerHTML = "";
+ let g=document.getElementById("grid");
+ g.innerHTML="";
+ for(let i=1;i<=100;i++){
+  let d=document.createElement("div");
+  d.className="numero";
+  d.innerText=i;
 
-    for(let i=1;i<=100;i++){
-        let div = document.createElement("div");
-        div.className="numero";
-        div.innerText=i;
+  if(estados[i]){
+    if(estados[i].estado=="pendiente") d.classList.add("reservado");
+    if(estados[i].estado=="pagado") d.classList.add("pagado");
+  } else if(selected.includes(i)){
+    d.classList.add("selected");
+  }
 
-        if(estados[i]){
-            if(estados[i].estado==="pendiente") div.classList.add("reservado");
-            if(estados[i].estado==="pagado") div.classList.add("pagado");
-        }
-        else if(selectedNumbers.includes(i)){
-            div.classList.add("selected");
-        }
-
-        if(!isTaken(i)){
-            div.onclick=()=>{
-                let idx = selectedNumbers.indexOf(i);
-                if(idx===-1) selectedNumbers.push(i);
-                else selectedNumbers.splice(idx,1);
-                pintar();
-            }
-        }
-
-        g.appendChild(div);
+  if(!estados[i]){
+    d.onclick=()=>{
+      let idx=selected.indexOf(i);
+      if(idx==-1) selected.push(i);
+      else selected.splice(idx,1);
+      pintar();
     }
+  }
+
+  g.appendChild(d);
+ }
 }
 
-// 📲 mensaje PRO
-function buildWhatsAppMessage() {
-    if (selectedNumbers.length === 0) return "";
-
-    const numerosOrdenados = [...selectedNumbers].sort((a,b)=>a-b);
-    const listaNumeros = numerosOrdenados.join(', ');
-    const cantidad = selectedNumbers.length;
-    const total = cantidad * PRECIO_UNITARIO;
-
-    let mensaje = `🎟️ SOLICITUD DE RESERVA - RIFA PREMIUM 🎟️\n\n`;
-    mensaje += `🎁 Premio: Dispensador de licor en madera + Botella de Whiskey\n`;
-    mensaje += `📅 Sorteo: 2 de mayo de 2026 con Lotería de Boyacá\n\n`;
-    mensaje += `🔢 Números elegidos: ${listaNumeros}\n`;
-    mensaje += `🎫 Cantidad: ${cantidad} boletos\n`;
-    mensaje += `💰 Valor unitario: $${PRECIO_UNITARIO.toLocaleString('es-CO')} COP\n`;
-    mensaje += `💵 Total a pagar: $${total.toLocaleString('es-CO')} COP\n\n`;
-    mensaje += `✅ Confirmo mi interés y procedo con el pago.\n\n`;
-    mensaje += `📲 ¡Quedo atento/a a sus datos de consignación! Gracias.`;
-
-    return encodeURIComponent(mensaje);
-}
-
-// 🚀 abre modal
 function sendWhatsApp(){
-    if(selectedNumbers.length===0){
-        alert("Selecciona números");
-        return;
-    }
-
-    limpiarFormulario(); // 👈 LIMPIA
-
-    document.getElementById("modal").style.display="flex";
-
-    document.getElementById("resumenNumeros").innerText = selectedNumbers.join(", ");
-    document.getElementById("resumenTotal").innerText = "$" + (selectedNumbers.length * PRECIO_UNITARIO).toLocaleString("es-CO");
-}
-// ❌ cerrar modal
-function cerrarModal(){
-    document.getElementById("modal").style.display="none";
-    limpiarFormulario(); // 👈 LIMPIA TAMBIÉN AL CERRAR
+ if(selected.length==0)return alert("Selecciona números");
+ document.getElementById("modal").style.display="flex";
+ document.getElementById("resumenNumeros").innerText=selected.join(",");
+ document.getElementById("resumenTotal").innerText="$"+(selected.length*PRECIO);
 }
 
-// ✅ confirmar reserva
 async function confirmarReserva(){
-    let nombre = document.getElementById("nombre").value;
-    let wa = document.getElementById("wa").value;
-    let correo = document.getElementById("correo").value;
+ let n=document.getElementById("nombre").value;
+ let w=document.getElementById("wa").value;
 
-    if(!nombre || !wa){
-        alert("Completa los datos");
-        return;
-    }
+ if(!n||!w)return alert("Completa datos");
 
-    if(!/^\d{10}$/.test(wa)){
-        alert("WhatsApp inválido");
-        return;
-    }
+ for(let num of selected){
+  await fetch(API_URL+"?action=register&numero="+num+"&nombre="+n+"&wa="+w);
+ }
 
-    for(let num of selectedNumbers){
-        let res = await fetch(API_URL + "?action=register"
-            + "&numero="+num
-            + "&nombre="+encodeURIComponent(nombre)
-            + "&wa="+encodeURIComponent(wa)
-            + "&correo="+encodeURIComponent(correo)
-        );
+ let msg=`Quiero los números ${selected.join(",")}`;
+ window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
 
-        let data = await res.json();
+ showToast("🎉 Reserva realizada. Haz tu pago y participa 🍀");
 
-        if(!data.ok){
-            alert(data.msg);
-            await cargarEstados();
-            return;
-        }
-    }
-
-    await cargarEstados();
-
-    let mensaje = buildWhatsAppMessage();
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`,"_blank");
-
-   showToast(`
-    🎉 <b>¡Reserva realizada con éxito!</b><br>
-    ⏳ Tienes 2 horas para completar tu pago.<br>
-    💥 Haz pronto tu pago y participa de este magnífico premio 🍀
-`   );
-
-    selectedNumbers = [];
-    limpiarFormulario(); // 👈 EXTRA PRO
-    cerrarModal();
-    pintar();
-    }
-
-function limpiarFormulario(){
-    document.getElementById("nombre").value = "";
-    document.getElementById("wa").value = "";
-    document.getElementById("correo").value = "";
-}
-// 🔄 iniciar
-cargarEstados();
-setInterval(cargarEstados, 10000);
-
-function showToast(msg){
-    const toast = document.getElementById("toast");
-    toast.innerHTML = msg;
-    toast.classList.add("show");
-
-    setTimeout(()=>{
-        toast.classList.remove("show");
-    }, 4000);
+ selected=[];
+ document.getElementById("modal").style.display="none";
+ cargar();
 }
 
+function showToast(t){
+ let toast=document.getElementById("toast");
+ toast.innerText=t;
+ toast.classList.add("show");
+ setTimeout(()=>toast.classList.remove("show"),4000);
+}
 
+cargar();
+setInterval(cargar,10000);
 </script>
 
-<!-- MODAL PREMIUM -->
-<div id="modal" class="modal">
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h2>🎟 Reserva tus números</h2>
-      <span onclick="cerrarModal()">✖</span>
-    </div>
-
-    <p class="modal-sub">
-      Estás a un paso de asegurar tu participación 🎉
-    </p>
-
-    <div class="input-group">
-      <label>Nombre completo</label>
-      <input type="text" id="nombre" placeholder="Ej: Juan Pérez">
-    </div>
-
-    <div class="input-group">
-      <label>WhatsApp</label>
-      <input type="text" id="wa" placeholder="Ej: 3001234567">
-    </div>
-
-    <div class="input-group">
-      <label>Correo (opcional)</label>
-      <input type="email" id="correo" placeholder="ejemplo@email.com">
-    </div>
-
-    <div class="resumen">
-      <p>🎯 Números: <span id="resumenNumeros"></span></p>
-      <p>💰 Total: <strong id="resumenTotal"></strong></p>
-    </div>
-
-    <button class="btn-confirm" onclick="confirmarReserva()">
-      Confirmar y enviar a WhatsApp
-    </button>
-
-  </div>
-</div>
-
-
-
 </body>
-
-
-
 </html>
