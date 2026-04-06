@@ -1,0 +1,164 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <title>Admin Rifa</title>
+
+    <style>
+    body{
+    font-family:Arial;
+    background:#0f2a5c;
+    color:#fff;
+    text-align:center;
+    }
+
+    h1{margin:20px}
+
+    .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+    gap:10px;
+    max-width:900px;
+    margin:auto;
+    }
+
+    .item{
+    padding:15px;
+    border-radius:10px;
+    background:#ccc;
+    color:#000;
+    cursor:pointer;
+    font-weight:bold;
+    }
+
+    .pendiente{background:#ffd966;}
+    .pagado{background:#e53935;color:#fff;}
+
+    .panel{
+    margin-top:20px;
+    }
+
+    button{
+    margin:5px;
+    padding:10px 15px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    }
+    </style>
+    </head>
+
+    <body>
+
+      <div id="login">
+  <h2>🔐 Acceso Admin</h2>
+  <input type="password" id="clave" placeholder="Clave">
+  <br><br>
+  <button onclick="login()">Ingresar</button>
+</div>
+
+<div id="app" style="display:none;">
+
+    <h1>🎟 Panel Admin</h1>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="panel" id="panel" style="display:none;">
+    <h3 id="numSel"></h3>
+    <p id="info"></p>
+
+    <button onclick="marcarPagado()">💰 Marcar Pagado</button>
+    <button onclick="liberar()">❌ Liberar</button>
+    </div>
+
+</div>
+
+ <script>
+
+const PASSWORD = "1234"; // 🔐 tu clave
+const API_URL = "https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+
+let estados = {}, actual = null;
+
+/* LOGIN SIMPLE */
+function login(){
+ let input = document.getElementById("clave").value;
+
+ if(input !== PASSWORD){
+   alert("Clave incorrecta");
+   return;
+ }
+
+ document.getElementById("login").style.display="none";
+ document.getElementById("app").style.display="block";
+
+ cargar();
+}
+
+/* CARGAR DATOS */
+async function cargar(){
+ try{
+   let r = await fetch(API_URL+"?action=status");
+   let j = await r.json();
+
+   if(j.ok){
+     estados = j.data;
+     pintar();
+   }
+ }catch(e){
+   alert("Error conectando con la API");
+ }
+}
+
+/* PINTAR */
+function pintar(){
+ let g = document.getElementById("grid");
+ g.innerHTML="";
+
+ for(let i=1;i<=100;i++){
+  let d=document.createElement("div");
+  d.className="item";
+  d.innerText=i;
+
+  if(estados[i]){
+    if(estados[i].estado=="pendiente") d.classList.add("pendiente");
+    if(estados[i].estado=="pagado") d.classList.add("pagado");
+
+    d.onclick=()=>{
+      actual=i;
+      document.getElementById("panel").style.display="block";
+      document.getElementById("numSel").innerText="Número "+i;
+      document.getElementById("info").innerText=
+        estados[i].nombre+" - "+estados[i].wa;
+    }
+  }
+
+  g.appendChild(d);
+ }
+}
+
+/* PAGADO */
+async function marcarPagado(){
+ if(!actual)return;
+
+ await fetch(API_URL+"?action=pay&numero="+actual);
+
+ estados[actual].estado="pagado";
+ pintar();
+}
+
+/* LIBERAR */
+async function liberar(){
+ if(!actual)return;
+
+ await fetch(API_URL+"?action=delete&numero="+actual);
+
+ delete estados[actual];
+ pintar();
+}
+
+</script>
+
+    </body>
+    </html>
