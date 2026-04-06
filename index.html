@@ -215,9 +215,12 @@ function sendWhatsApp(){
    return;
  }
 
- let total=selected.length*PRECIO;
+ let total = selected.length * PRECIO;
 
- let msg=
+/* 👇 IMPORTANTE: AGREGA 57 */
+ let telefono = "57" + WHATSAPP_NUMBER.replace(/\D/g,'');
+
+ let msg =
 `🎟 *SOLICITUD DE RESERVA - RIFA PREMIUM*
 
 🎁 *Premio:* Dispensador de licor en madera + Whiskey
@@ -231,7 +234,10 @@ function sendWhatsApp(){
 ✅ Confirmo mi interés y procederé con el pago.
 🙏 Quedo atento a los datos de consignación.`;
 
- window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+ let url = `https://wa.me/${telefono}?text=${encodeURIComponent(msg)}`;
+
+ /* 👇 MÁS SEGURO QUE window.open */
+ window.location.href = url;
 }
 
 cargar();
