@@ -178,27 +178,45 @@ async function cargar(){
 
 /* PINTAR */
 function pintar(){
- let g=document.getElementById("grid");
- g.innerHTML="";
+ let g = document.getElementById("grid");
+ g.innerHTML = "";
 
  for(let i=1;i<=100;i++){
 
-  let d=document.createElement("div");
-  d.className="numero";
-  d.innerText=i;
+  let d = document.createElement("div");
+  d.className = "numero";
+  d.innerText = i;
 
-  if(estados[i]){
-    if(estados[i].estado=="pendiente") d.classList.add("reservado");
-    if(estados[i].estado=="pagado") d.classList.add("pagado");
-  } else if(selected.includes(i)){
+  let estado = estados[i]?.estado; // 👈 clave
+
+  // 🔴 PAGADO (máxima prioridad)
+  if(estado === "pagado"){
+    d.classList.add("pagado");
+    d.style.pointerEvents = "none";
+  }
+
+  // 🟡 RESERVADO
+  else if(estado === "pendiente"){
+    d.classList.add("reservado");
+    d.style.pointerEvents = "none";
+  }
+
+  // 🟢 SELECCIONADO
+  else if(selected.includes(i)){
     d.classList.add("selected");
   }
 
-  if(!estados[i]){
-    d.onclick=()=>{
-      let idx=selected.indexOf(i);
-      if(idx==-1) selected.push(i);
-      else selected.splice(idx,1);
+  // ⚪ DISPONIBLE
+  else{
+    d.onclick = () => {
+      let idx = selected.indexOf(i);
+
+      if(idx === -1){
+        selected.push(i);
+      }else{
+        selected.splice(idx,1);
+      }
+
       pintar();
     }
   }
@@ -206,6 +224,8 @@ function pintar(){
   g.appendChild(d);
  }
 }
+
+
 
 /* WHATSAPP */
 function sendWhatsApp(){
