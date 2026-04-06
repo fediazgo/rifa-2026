@@ -4,50 +4,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Rifa Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <style>
-:root{
- --blue:#1A6FD4;
- --navy:#0D3B7A;
- --green:#17B86A;
- --red:#E03434;
- --bg:#EEF5FF;
- --shadow:0 10px 30px rgba(0,0,0,0.2);
-}
-
 body{
  margin:0;
  font-family:'Nunito',sans-serif;
- background:linear-gradient(135deg,var(--navy),var(--blue));
+ background:linear-gradient(135deg,#0D3B7A,#1A6FD4);
  text-align:center;
  color:white;
 }
 
 .container{
- max-width:1100px;
- margin:30px auto;
+ max-width:1200px;
+ margin:20px auto;
  background:white;
  color:#0D2545;
  border-radius:20px;
- padding:25px;
- box-shadow:var(--shadow);
+ padding:20px;
 }
 
 h1{
  font-family:'Bebas Neue';
- font-size:40px;
+ font-size:42px;
  color:#0D3B7A;
 }
 
+.premio-img{
+ width:220px;
+ border-radius:15px;
+ cursor:pointer;
+ transition:.3s;
+}
+.premio-img:hover{transform:scale(1.05);}
+
+.numbers-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
+ gap:10px;
+ margin-top:20px;
+}
+
 .numero{
- padding:18px;
- border-radius:12px;
+ padding:16px;
+ border-radius:10px;
  background:#e9eef7;
  font-weight:900;
+ font-size:18px;
  cursor:pointer;
 }
 
@@ -55,30 +60,23 @@ h1{
 .reservado{background:#FFD966;}
 .pagado{background:#E03434;color:white;}
 
-.numbers-grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
- gap:10px;
-}
-
 button{
  margin-top:20px;
  padding:12px 25px;
  border:none;
- border-radius:30px;
+ border-radius:25px;
  background:#17B86A;
  color:white;
  font-weight:bold;
  cursor:pointer;
 }
 
-/* MODAL */
-#modal{
+.modal{
  display:none;
  position:fixed;
  top:0;left:0;
  width:100%;height:100%;
- background:rgba(0,0,0,.5);
+ background:rgba(0,0,0,.6);
  justify-content:center;
  align-items:center;
 }
@@ -91,21 +89,15 @@ button{
  width:300px;
 }
 
-/* TICKET */
-#ticket{
- display:none;
- position:fixed;
- top:0;left:0;
- width:100%;height:100%;
- background:rgba(0,0,0,.6);
- justify-content:center;
- align-items:center;
+input{
+ width:90%;
+ padding:10px;
+ margin:5px;
 }
-.ticket-box{
- background:white;
- padding:25px;
- border-radius:15px;
- text-align:center;
+
+#imgModal img{
+ max-width:90%;
+ border-radius:20px;
 }
 </style>
 </head>
@@ -115,34 +107,30 @@ button{
 <div class="container">
 <h1>🎟 Rifa Dispensador + Whiskey</h1>
 
+<img src="dispensador_a.jpg" class="premio-img" onclick="verImagen()">
+
+<p><b>🎯 Disponibles: <span id="disponibles">100</span></b></p>
+
 <div id="grid" class="numbers-grid"></div>
 
 <button onclick="abrirModal()">Reservar</button>
 </div>
 
 <!-- MODAL FORM -->
-<div id="modal">
+<div id="modal" class="modal">
  <div class="modal-box">
   <h3>Datos</h3>
-  <input id="nombre" placeholder="Nombre"><br><br>
-  <input id="wa" placeholder="WhatsApp"><br><br>
-  <input id="correo" placeholder="Correo (opcional)"><br><br>
+  <input id="nombre" placeholder="Nombre"><br>
+  <input id="wa" placeholder="WhatsApp"><br>
+  <input id="correo" placeholder="Correo (opcional)"><br>
   <button onclick="confirmarReserva()">Confirmar</button>
  </div>
 </div>
 
-<!-- TICKET -->
-<div id="ticket">
- <div class="ticket-box">
-  <h2>✅ Reserva exitosa</h2>
-  <p id="ticketNums"></p>
-  <button onclick="cerrarTicket()">OK</button>
- </div>
+<!-- IMAGEN ZOOM -->
+<div id="imgModal" class="modal" onclick="this.style.display='none'">
+ <img src="dispensador_a.jpg">
 </div>
-
-<audio id="sound-ok">
-<source src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3">
-</audio>
 
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
@@ -155,6 +143,7 @@ async function cargar(){
  let r=await fetch(API_URL+"?action=status");
  let j=await r.json();
  estados=j.data||{};
+ document.getElementById("disponibles").innerText=j.stats?.disponibles||100;
  pintar();
 }
 
@@ -169,13 +158,10 @@ function pintar(){
 
   let estado=estados[i]?.estado;
 
-  if(estado==="pagado"){
-    d.classList.add("pagado");
-  }else if(estado==="pendiente"){
-    d.classList.add("reservado");
-  }else if(selected.includes(i)){
-    d.classList.add("selected");
-  }else{
+  if(estado==="pagado") d.classList.add("pagado");
+  else if(estado==="pendiente") d.classList.add("reservado");
+  else if(selected.includes(i)) d.classList.add("selected");
+  else{
     d.onclick=()=>{
       let idx=selected.indexOf(i);
       if(idx==-1) selected.push(i);
@@ -189,15 +175,11 @@ function pintar(){
 }
 
 function abrirModal(){
- if(selected.length==0){
-  alert("Selecciona números");
-  return;
- }
+ if(selected.length==0)return alert("Selecciona números");
  document.getElementById("modal").style.display="flex";
 }
 
 async function confirmarReserva(){
-
  if(bloqueado) return;
  bloqueado=true;
 
@@ -205,7 +187,7 @@ async function confirmarReserva(){
  let w=document.getElementById("wa").value;
  let c=document.getElementById("correo").value;
 
- if(!n || !w){
+ if(!n||!w){
   alert("Completa datos");
   bloqueado=false;
   return;
@@ -218,14 +200,9 @@ async function confirmarReserva(){
   "&correo="+encodeURIComponent(c));
  }
 
- let msg=`SOLICITUD RIFA\nNumeros: ${selected.join(",")}`;
+ let msg=`🎟 SOLICITUD RIFA\nNumeros: ${selected.join(",")}`;
 
  window.open(`https://wa.me/57${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
-
- document.getElementById("sound-ok").play();
-
- document.getElementById("ticket").style.display="flex";
- document.getElementById("ticketNums").innerText=selected.join(", ");
 
  selected=[];
  document.getElementById("modal").style.display="none";
@@ -233,11 +210,11 @@ async function confirmarReserva(){
  setTimeout(()=>{
   cargar();
   bloqueado=false;
- },1500);
+ },1000);
 }
 
-function cerrarTicket(){
- document.getElementById("ticket").style.display="none";
+function verImagen(){
+ document.getElementById("imgModal").style.display="flex";
 }
 
 cargar();
