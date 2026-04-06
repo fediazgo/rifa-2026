@@ -3,202 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Rifa Premium</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <style>
+:root{
+ --blue:#1A6FD4;
+ --navy:#0D3B7A;
+ --green:#17B86A;
+ --yellow:#FFD700;
+ --red:#E03434;
+ --bg:#EEF5FF;
+ --white:#fff;
+ --shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
 body{
- font-family:Inter;
  margin:0;
- background:linear-gradient(135deg,#0f2a5c,#1e4db7);
- color:#fff;
+ font-family:'Nunito',sans-serif;
+ background:linear-gradient(135deg,var(--navy),var(--blue));
+ color:white;
+ text-align:center;
 }
 
 /* CONTENEDOR */
 .container{
  max-width:1100px;
- margin:auto;
- padding:20px;
- text-align:center;
+ margin:30px auto;
+ background:white;
+ color:#0D2545;
+ border-radius:20px;
+ padding:25px;
+ box-shadow:var(--shadow);
 }
 
-/* TITULO */
-.titulo{
- font-size:32px;
- font-weight:800;
- margin-bottom:5px;
+/* TITULOS */
+h1{
+ font-family:'Bebas Neue';
+ font-size:40px;
+ margin:0;
+ color:var(--navy);
+ letter-spacing:1px;
 }
 
-.subtitulo{
- font-size:14px;
- opacity:.9;
+.sub{
+ font-weight:700;
+ color:#3A5A8A;
+ margin-bottom:15px;
 }
 
 /* IMAGEN */
 .premio-img{
  width:220px;
- margin-top:15px;
  border-radius:20px;
- box-shadow:0 20px 40px rgba(0,0,0,0.4);
- transition:.3s;
-}
-.premio-img:hover{transform:scale(1.08);}
-
-.premio-text{
- color:#ffd966;
- font-weight:600;
- margin-top:10px;
+ margin:15px 0;
+ box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* CONTADOR */
-.contador{
- margin-top:15px;
+/* DISPONIBLES */
+.dispo{
  font-size:18px;
- font-weight:700;
+ font-weight:800;
+ margin:10px 0;
+}
+
+/* GRID */
+.numbers-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
+ gap:12px;
+ margin-top:20px;
+}
+
+/* NUMEROS */
+.numero{
+ padding:18px;
+ border-radius:12px;
+ background:#e9eef7;
+ font-weight:900;
+ font-size:20px;
+ cursor:pointer;
+ transition:.2s;
+}
+
+.numero:hover{
+ transform:scale(1.08);
+}
+
+.selected{background:var(--green);color:white;}
+.reservado{background:#FFD966;}
+.pagado{background:var(--red);color:white;}
+
+/* BOTON */
+button{
+ margin-top:25px;
+ padding:14px 30px;
+ border:none;
+ border-radius:30px;
+ background:var(--green);
+ color:white;
+ font-size:16px;
+ font-weight:900;
+ cursor:pointer;
+ transition:.2s;
+}
+
+button:hover{
+ transform:scale(1.05);
 }
 
 /* LEYENDA */
 .leyenda{
  display:flex;
  justify-content:center;
+ gap:15px;
  flex-wrap:wrap;
- gap:10px;
- margin:15px 0;
+ margin-top:10px;
 }
 
 .item{
- display:flex;
- align-items:center;
- gap:6px;
- background:#fff;
- color:#000;
- padding:6px 12px;
- border-radius:20px;
- font-size:12px;
- font-weight:600;
-}
-
-.box{width:12px;height:12px;border-radius:50%;}
-.libre{background:#ccc}
-.seleccionado{background:#2c6e2e}
-.reservado{background:#ffd966}
-.pagado{background:#e53935}
-
-/* GRID */
-.numbers-grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(65px,1fr));
- gap:12px;
- max-width:900px;
- margin:20px auto;
- padding:20px;
- background:#fff;
- border-radius:20px;
- box-shadow:0 10px 30px rgba(0,0,0,0.25);
-}
-
-.numero{
- padding:16px;
- border-radius:12px;
- background:#f1f1f1;
- cursor:pointer;
- font-weight:800;
- font-size:18px;
- color:#333;
- display:flex;
- align-items:center;
- justify-content:center;
- transition:.2s;
-}
-
-.numero:hover{
- transform:scale(1.08);
- box-shadow:0 6px 15px rgba(0,0,0,0.2);
-}
-
-.numero.selected{background:#2c6e2e;color:#fff;}
-.numero.reservado{background:#ffd966;color:#000;}
-.numero.pagado{background:#e53935;color:#fff;}
-
-/* BOTON */
-.btn{
- display:block;
- margin:30px auto;
- padding:14px 30px;
- border:none;
- border-radius:25px;
- background:#25D366;
- color:#fff;
- font-weight:700;
- font-size:16px;
- cursor:pointer;
-}
-
-/* MODAL */
-.modal{
- display:none;
- position:fixed;
- top:0;left:0;
- width:100%;height:100%;
- background:rgba(0,0,0,0.7);
- justify-content:center;
- align-items:center;
-}
-
-.modal-box{
- background:#fff;
- color:#000;
- padding:25px;
- border-radius:20px;
- width:90%;
- max-width:350px;
-}
-
-.modal-box input{
- width:100%;
- padding:10px;
- margin:8px 0;
+ background:#f4f6fb;
+ padding:6px 10px;
  border-radius:10px;
- border:1px solid #ccc;
+ font-size:13px;
 }
 
-.resumen{
- background:#f4f4f4;
- padding:10px;
- border-radius:10px;
- margin-top:10px;
-}
-
-.btn-confirm{
- width:100%;
- padding:12px;
- margin-top:10px;
- background:#25D366;
- color:#fff;
- border:none;
- border-radius:15px;
- font-weight:700;
-}
-
-/* TOAST */
-.toast{
- position:fixed;
- bottom:30px;
- left:50%;
- transform:translateX(-50%) translateY(100px);
- background:#2c6e2e;
- color:#fff;
- padding:15px 20px;
- border-radius:15px;
- opacity:0;
- transition:.4s;
-}
-
-.toast.show{
- opacity:1;
- transform:translateX(-50%) translateY(0);
-}
 </style>
 </head>
 
@@ -206,48 +137,25 @@ body{
 
 <div class="container">
 
-<h1 class="titulo">🎟 Rifa Dispensador + Whiskey</h1>
-<p class="subtitulo">$20.000 COP • Lotería de Boyacá • 2 Mayo 2026</p>
+<h1>🎟 Rifa Dispensador + Whiskey</h1>
+<p class="sub">$20.000 COP · Lotería de Boyacá · 2 Mayo 2026</p>
 
 <img src="dispensador_a.jpg" class="premio-img">
-<p class="premio-text">Dispensador de licor en madera + Whiskey</p>
 
-<div class="contador">
-🎯 Disponibles: <span id="disponibles">100</span>
-</div>
+<p><b>Dispensador de licor en madera + Whiskey</b></p>
+
+<p class="dispo">🎯 Disponibles: <span id="disponibles">100</span></p>
 
 <div class="leyenda">
- <div class="item"><span class="box libre"></span> Libre</div>
- <div class="item"><span class="box seleccionado"></span> Seleccionado</div>
- <div class="item"><span class="box reservado"></span> Reservado</div>
- <div class="item"><span class="box pagado"></span> Pagado</div>
+ <div class="item">🟩 Seleccionado</div>
+ <div class="item">🟨 Reservado</div>
+ <div class="item">🟥 Pagado</div>
 </div>
 
-<p id="loading">⏳ Cargando números...</p>
+<div id="grid" class="numbers-grid"></div>
 
-<div class="numbers-grid" id="grid"></div>
+<button onclick="sendWhatsApp()">Reservar</button>
 
-<button class="btn" onclick="sendWhatsApp()">Reservar</button>
-
-</div>
-
-<div id="toast" class="toast"></div>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
- <div class="modal-box">
-  <h3>Completa tus datos</h3>
-
-  <input type="text" id="nombre" placeholder="Nombre">
-  <input type="text" id="wa" placeholder="WhatsApp">
-
-  <div class="resumen">
-    <p id="resumenNumeros"></p>
-    <p id="resumenTotal"></p>
-  </div>
-
-  <button class="btn-confirm" onclick="confirmarReserva()">Confirmar</button>
- </div>
 </div>
 
 <script>
@@ -257,21 +165,24 @@ const PRECIO=20000;
 
 let estados={},selected=[];
 
+/* CARGAR */
 async function cargar(){
  let r=await fetch(API_URL+"?action=status");
  let j=await r.json();
- if(j.ok){
-  estados=j.data;
-  document.getElementById("disponibles").innerText=j.stats.disponibles;
-  pintar();
-  document.getElementById("loading").style.display="none";
- }
+
+ estados=j.data||{};
+ document.getElementById("disponibles").innerText=j.stats?.disponibles||100;
+
+ pintar();
 }
 
+/* PINTAR */
 function pintar(){
  let g=document.getElementById("grid");
  g.innerHTML="";
+
  for(let i=1;i<=100;i++){
+
   let d=document.createElement("div");
   d.className="numero";
   d.innerText=i;
@@ -296,43 +207,34 @@ function pintar(){
  }
 }
 
+/* WHATSAPP */
 function sendWhatsApp(){
- if(selected.length==0)return alert("Selecciona números");
 
- document.getElementById("modal").style.display="flex";
- document.getElementById("resumenNumeros").innerText="Números: "+selected.join(", ");
- document.getElementById("resumenTotal").innerText="Total: $"+(selected.length*PRECIO).toLocaleString("es-CO");
-}
-
-async function confirmarReserva(){
- let n=document.getElementById("nombre").value;
- let w=document.getElementById("wa").value;
-
- if(!n||!w)return alert("Completa datos");
-
- for(let num of selected){
-  await fetch(API_URL+"?action=register&numero="+num+"&nombre="+n+"&wa="+w);
+ if(selected.length==0){
+   alert("Selecciona números");
+   return;
  }
 
- let msg=`SOLICITUD DE RESERVA\nNúmeros: ${selected.join(",")}`;
+ let total=selected.length*PRECIO;
+
+ let msg=
+`🎟 *SOLICITUD DE RESERVA - RIFA PREMIUM*
+
+🎁 *Premio:* Dispensador de licor en madera + Whiskey
+📅 *Sorteo:* 2 de mayo de 2026 (Lotería de Boyacá)
+
+🔢 *Números:* ${selected.join(", ")}
+🎫 *Cantidad:* ${selected.length}
+💰 *Valor unitario:* $${PRECIO.toLocaleString()}
+💵 *Total:* $${total.toLocaleString()}
+
+✅ Confirmo mi interés y procederé con el pago.
+🙏 Quedo atento a los datos de consignación.`;
+
  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
-
- showToast("🎉 Reserva realizada. Haz tu pago y participa 🍀");
-
- selected=[];
- document.getElementById("modal").style.display="none";
- cargar();
-}
-
-function showToast(t){
- let toast=document.getElementById("toast");
- toast.innerText=t;
- toast.classList.add("show");
- setTimeout(()=>toast.classList.remove("show"),4000);
 }
 
 cargar();
-setInterval(cargar,10000);
 </script>
 
 </body>
