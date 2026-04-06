@@ -228,7 +228,56 @@ function pintar(){
 
 
 /* WHATSAPP */
-function sendWhatsApp(){
+async function confirmarReserva(){
+
+ let n = document.getElementById("nombre").value.trim();
+ let w = document.getElementById("wa").value.trim();
+ let c = document.getElementById("correo").value.trim();
+
+ if(!n || !w){
+   alert("Completa nombre y WhatsApp");
+   return;
+ }
+
+ // guardar en backend
+ for(let num of selected){
+  await fetch(API_URL+"?action=register"
+   +"&numero="+num
+   +"&nombre="+encodeURIComponent(n)
+   +"&wa="+encodeURIComponent(w)
+   +"&correo="+encodeURIComponent(c)
+  );
+ }
+
+ // mensaje PRO
+ let msg =
+`🎟 *SOLICITUD DE RESERVA - RIFA PREMIUM*
+
+🎁 *Premio:* Dispensador de licor en madera + Whiskey
+📅 *Sorteo:* 2 de mayo de 2026 - Lotería de Boyacá
+
+🔢 *Números:* ${selected.join(", ")}
+🎫 *Cantidad:* ${selected.length}
+💰 *Valor unidad:* $20.000 COP
+💵 *Total:* $${(selected.length * PRECIO).toLocaleString("es-CO")}
+
+👤 *Nombre:* ${n}
+📱 *WhatsApp:* ${w}
+📧 *Correo:* ${c || "No registra"}
+
+✅ Confirmo mi interés y procederé con el pago.`;
+
+ // abrir WhatsApp
+ window.open(
+   `https://wa.me/57${w}?text=${encodeURIComponent(msg)}`,
+   "_blank"
+ );
+
+ // reset
+ selected = [];
+ document.getElementById("modal").style.display = "none";
+ cargar();
+}
 
  if(selected.length==0){
    alert("Selecciona números");
@@ -258,7 +307,7 @@ function sendWhatsApp(){
 
  /* 👇 MÁS SEGURO QUE window.open */
  window.location.href = url;
-}
+
 
 cargar();
 </script>
