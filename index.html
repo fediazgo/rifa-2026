@@ -303,10 +303,12 @@ async function confirmarReserva(){
 ✅ Confirmo mi interés y procederé con el pago.
 🙏 Quedo atento a los datos de consignación.`;
 
- let url = `https://wa.me/${telefono}?text=${encodeURIComponent(msg)}`;
+let url = `https://wa.me/57${w}?text=${encodeURIComponent(msg)}`;
+let win = window.open(url, "_blank");
 
- /* 👇 MÁS SEGURO QUE window.open */
- window.location.href = url;
+if(!win){
+  alert("Activa las ventanas emergentes para continuar");
+}
 
 
 cargar();
