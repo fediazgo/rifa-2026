@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,10 +14,8 @@
  --blue:#1A6FD4;
  --navy:#0D3B7A;
  --green:#17B86A;
- --yellow:#FFD700;
  --red:#E03434;
  --bg:#EEF5FF;
- --white:#fff;
  --shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
@@ -24,11 +23,10 @@ body{
  margin:0;
  font-family:'Nunito',sans-serif;
  background:linear-gradient(135deg,var(--navy),var(--blue));
- color:white;
  text-align:center;
+ color:white;
 }
 
-/* CONTENEDOR */
 .container{
  max-width:1100px;
  margin:30px auto;
@@ -39,184 +37,149 @@ body{
  box-shadow:var(--shadow);
 }
 
-/* TITULOS */
 h1{
  font-family:'Bebas Neue';
  font-size:40px;
- margin:0;
- color:var(--navy);
- letter-spacing:1px;
+ color:#0D3B7A;
 }
 
-.sub{
- font-weight:700;
- color:#3A5A8A;
- margin-bottom:15px;
-}
-
-/* IMAGEN */
-.premio-img{
- width:220px;
- border-radius:20px;
- margin:15px 0;
- box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
-
-/* DISPONIBLES */
-.dispo{
- font-size:18px;
- font-weight:800;
- margin:10px 0;
-}
-
-/* GRID */
-.numbers-grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
- gap:12px;
- margin-top:20px;
-}
-
-/* NUMEROS */
 .numero{
  padding:18px;
  border-radius:12px;
  background:#e9eef7;
  font-weight:900;
- font-size:20px;
  cursor:pointer;
- transition:.2s;
 }
 
-.numero:hover{
- transform:scale(1.08);
-}
-
-.selected{background:var(--green);color:white;}
+.selected{background:#17B86A;color:white;}
 .reservado{background:#FFD966;}
-.pagado{background:var(--red);color:white;}
+.pagado{background:#E03434;color:white;}
 
-/* BOTON */
+.numbers-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
+ gap:10px;
+}
+
 button{
- margin-top:25px;
- padding:14px 30px;
+ margin-top:20px;
+ padding:12px 25px;
  border:none;
  border-radius:30px;
- background:var(--green);
+ background:#17B86A;
  color:white;
- font-size:16px;
- font-weight:900;
+ font-weight:bold;
  cursor:pointer;
- transition:.2s;
 }
 
-button:hover{
- transform:scale(1.05);
-}
-
-/* LEYENDA */
-.leyenda{
- display:flex;
+/* MODAL */
+#modal{
+ display:none;
+ position:fixed;
+ top:0;left:0;
+ width:100%;height:100%;
+ background:rgba(0,0,0,.5);
  justify-content:center;
- gap:15px;
- flex-wrap:wrap;
- margin-top:10px;
+ align-items:center;
 }
 
-.item{
- background:#f4f6fb;
- padding:6px 10px;
- border-radius:10px;
- font-size:13px;
+.modal-box{
+ background:white;
+ padding:20px;
+ border-radius:15px;
+ color:black;
+ width:300px;
 }
 
+/* TICKET */
+#ticket{
+ display:none;
+ position:fixed;
+ top:0;left:0;
+ width:100%;height:100%;
+ background:rgba(0,0,0,.6);
+ justify-content:center;
+ align-items:center;
+}
+.ticket-box{
+ background:white;
+ padding:25px;
+ border-radius:15px;
+ text-align:center;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
 <h1>🎟 Rifa Dispensador + Whiskey</h1>
-<p class="sub">$20.000 COP · Lotería de Boyacá · 2 Mayo 2026</p>
-
-<img src="dispensador_a.jpg" class="premio-img">
-
-<p><b>Dispensador de licor en madera + Whiskey</b></p>
-
-<p class="dispo">🎯 Disponibles: <span id="disponibles">100</span></p>
-
-<div class="leyenda">
- <div class="item">🟩 Seleccionado</div>
- <div class="item">🟨 Reservado</div>
- <div class="item">🟥 Pagado</div>
-</div>
 
 <div id="grid" class="numbers-grid"></div>
 
-<button onclick="sendWhatsApp()">Reservar</button>
-
+<button onclick="abrirModal()">Reservar</button>
 </div>
+
+<!-- MODAL FORM -->
+<div id="modal">
+ <div class="modal-box">
+  <h3>Datos</h3>
+  <input id="nombre" placeholder="Nombre"><br><br>
+  <input id="wa" placeholder="WhatsApp"><br><br>
+  <input id="correo" placeholder="Correo (opcional)"><br><br>
+  <button onclick="confirmarReserva()">Confirmar</button>
+ </div>
+</div>
+
+<!-- TICKET -->
+<div id="ticket">
+ <div class="ticket-box">
+  <h2>✅ Reserva exitosa</h2>
+  <p id="ticketNums"></p>
+  <button onclick="cerrarTicket()">OK</button>
+ </div>
+</div>
+
+<audio id="sound-ok">
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3">
+</audio>
 
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
 const WHATSAPP_NUMBER="3246860209";
 const PRECIO=20000;
 
-let estados={},selected=[];
+let estados={},selected=[],bloqueado=false;
 
-/* CARGAR */
 async function cargar(){
  let r=await fetch(API_URL+"?action=status");
  let j=await r.json();
-
  estados=j.data||{};
- document.getElementById("disponibles").innerText=j.stats?.disponibles||100;
-
  pintar();
 }
 
-/* PINTAR */
 function pintar(){
- let g = document.getElementById("grid");
- g.innerHTML = "";
+ let g=document.getElementById("grid");
+ g.innerHTML="";
 
  for(let i=1;i<=100;i++){
+  let d=document.createElement("div");
+  d.className="numero";
+  d.innerText=i;
 
-  let d = document.createElement("div");
-  d.className = "numero";
-  d.innerText = i;
+  let estado=estados[i]?.estado;
 
-  let estado = estados[i]?.estado; // 👈 clave
-
-  // 🔴 PAGADO (máxima prioridad)
-  if(estado === "pagado"){
+  if(estado==="pagado"){
     d.classList.add("pagado");
-    d.style.pointerEvents = "none";
-  }
-
-  // 🟡 RESERVADO
-  else if(estado === "pendiente"){
+  }else if(estado==="pendiente"){
     d.classList.add("reservado");
-    d.style.pointerEvents = "none";
-  }
-
-  // 🟢 SELECCIONADO
-  else if(selected.includes(i)){
+  }else if(selected.includes(i)){
     d.classList.add("selected");
-  }
-
-  // ⚪ DISPONIBLE
-  else{
-    d.onclick = () => {
-      let idx = selected.indexOf(i);
-
-      if(idx === -1){
-        selected.push(i);
-      }else{
-        selected.splice(idx,1);
-      }
-
+  }else{
+    d.onclick=()=>{
+      let idx=selected.indexOf(i);
+      if(idx==-1) selected.push(i);
+      else selected.splice(idx,1);
       pintar();
     }
   }
@@ -225,94 +188,61 @@ function pintar(){
  }
 }
 
+function abrirModal(){
+ if(selected.length==0){
+  alert("Selecciona números");
+  return;
+ }
+ document.getElementById("modal").style.display="flex";
+}
 
-
-/* WHATSAPP */
 async function confirmarReserva(){
 
- let n = document.getElementById("nombre").value.trim();
- let w = document.getElementById("wa").value.trim();
- let c = document.getElementById("correo").value.trim();
+ if(bloqueado) return;
+ bloqueado=true;
+
+ let n=document.getElementById("nombre").value;
+ let w=document.getElementById("wa").value;
+ let c=document.getElementById("correo").value;
 
  if(!n || !w){
-   alert("Completa nombre y WhatsApp");
-   return;
+  alert("Completa datos");
+  bloqueado=false;
+  return;
  }
 
- // guardar en backend
  for(let num of selected){
-  await fetch(API_URL+"?action=register"
-   +"&numero="+num
-   +"&nombre="+encodeURIComponent(n)
-   +"&wa="+encodeURIComponent(w)
-   +"&correo="+encodeURIComponent(c)
-  );
+  await fetch(API_URL+"?action=register&numero="+num+
+  "&nombre="+encodeURIComponent(n)+
+  "&wa="+encodeURIComponent(w)+
+  "&correo="+encodeURIComponent(c));
  }
 
- // mensaje PRO
- let msg =
-`🎟 *SOLICITUD DE RESERVA - RIFA PREMIUM*
+ let msg=`SOLICITUD RIFA\nNumeros: ${selected.join(",")}`;
 
-🎁 *Premio:* Dispensador de licor en madera + Whiskey
-📅 *Sorteo:* 2 de mayo de 2026 - Lotería de Boyacá
+ window.open(`https://wa.me/57${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
 
-🔢 *Números:* ${selected.join(", ")}
-🎫 *Cantidad:* ${selected.length}
-💰 *Valor unidad:* $20.000 COP
-💵 *Total:* $${(selected.length * PRECIO).toLocaleString("es-CO")}
+ document.getElementById("sound-ok").play();
 
-👤 *Nombre:* ${n}
-📱 *WhatsApp:* ${w}
-📧 *Correo:* ${c || "No registra"}
+ document.getElementById("ticket").style.display="flex";
+ document.getElementById("ticketNums").innerText=selected.join(", ");
 
-✅ Confirmo mi interés y procederé con el pago.`;
+ selected=[];
+ document.getElementById("modal").style.display="none";
 
- // abrir WhatsApp
- window.open(
-   `https://wa.me/57${w}?text=${encodeURIComponent(msg)}`,
-   "_blank"
- );
-
- // reset
- selected = [];
- document.getElementById("modal").style.display = "none";
- cargar();
+ setTimeout(()=>{
+  cargar();
+  bloqueado=false;
+ },1500);
 }
 
- if(selected.length==0){
-   alert("Selecciona números");
-   return;
- }
-
- let total = selected.length * PRECIO;
-
-/* 👇 IMPORTANTE: AGREGA 57 */
- let telefono = "57" + WHATSAPP_NUMBER.replace(/\D/g,'');
-
- let msg =
-`🎟 *SOLICITUD DE RESERVA - RIFA PREMIUM*
-
-🎁 *Premio:* Dispensador de licor en madera + Whiskey
-📅 *Sorteo:* 2 de mayo de 2026 (Lotería de Boyacá)
-
-🔢 *Números:* ${selected.join(", ")}
-🎫 *Cantidad:* ${selected.length}
-💰 *Valor unitario:* $${PRECIO.toLocaleString()}
-💵 *Total:* $${total.toLocaleString()}
-
-✅ Confirmo mi interés y procederé con el pago.
-🙏 Quedo atento a los datos de consignación.`;
-
-let url = `https://wa.me/57${w}?text=${encodeURIComponent(msg)}`;
-let win = window.open(url, "_blank");
-
-if(!win){
-  alert("Activa las ventanas emergentes para continuar");
+function cerrarTicket(){
+ document.getElementById("ticket").style.display="none";
 }
-
 
 cargar();
 </script>
 
 </body>
 </html>
+```
