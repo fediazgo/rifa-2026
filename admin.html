@@ -1,108 +1,137 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Admin Rifa PRO</title>
+<title>Admin Rifa Premium</title>
 
 <style>
 body{
- font-family:Arial;
+ font-family:'Segoe UI';
  background:#0D3B7A;
  color:white;
  text-align:center;
 }
 
+h1{margin:20px}
+
+.info{
+ margin-bottom:10px;
+ font-size:14px;
+ opacity:.8;
+}
+
+/* GRID */
 .grid{
  display:grid;
- grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+ grid-template-columns:repeat(10,1fr);
  gap:10px;
- max-width:900px;
+ max-width:600px;
  margin:auto;
 }
 
-.item{
+/* NUMEROS */
+.num{
  padding:15px;
  border-radius:10px;
  background:#ccc;
  color:#000;
- cursor:pointer;
  font-weight:bold;
+ cursor:pointer;
 }
 
 .pendiente{background:#FFD966;}
 .pagado{background:#E03434;color:white;}
 
+/* PANEL */
 .panel{
  margin-top:20px;
  display:none;
+ background:white;
+ color:black;
+ padding:20px;
+ border-radius:15px;
+ max-width:400px;
+ margin-left:auto;
+ margin-right:auto;
 }
 
 button{
  margin:5px;
- padding:10px;
+ padding:10px 15px;
  border:none;
  border-radius:10px;
  cursor:pointer;
+ font-weight:bold;
 }
+
+.btn1{background:#17B86A;color:white;}
+.btn2{background:#FF9800;color:white;}
+.btn3{background:#E03434;color:white;}
 </style>
 </head>
 
 <body>
 
-<h1>🎟 ADMIN RIFA</h1>
+<h1>🎟 Panel Admin</h1>
 
-<div id="grid" class="grid"></div>
+<div class="info">
+📅 Sorteo: 2 Mayo 2026<br>
+🟨 Pendiente | 🟥 Pagado
+</div>
 
-<div id="panel" class="panel">
-<h3 id="numSel"></h3>
-<p id="info"></p>
+<div class="grid" id="grid"></div>
 
-<button onclick="marcarPagado()">💰 Pagado</button>
-<button onclick="marcarPendiente()">🟡 Reservar</button>
-<button onclick="liberar()">❌ Liberar</button>
+<div class="panel" id="panel">
+ <h3 id="numSel"></h3>
+ <p id="info"></p>
+
+ <button class="btn1" onclick="marcarPagado()">💰 Pagado</button>
+ <button class="btn2" onclick="volverPendiente()">⏳ Pendiente</button>
+ <button class="btn3" onclick="liberar()">❌ Liberar</button>
 </div>
 
 <script>
-let clave=prompt("Clave");
-if(clave!=="1234"){
- document.body.innerHTML="Acceso denegado";
-}
+const API_URL="TU_API_AQUI";
 
-const API_URL="https://script.google.com/macros/s/AKfycbxrLfMOdW-KBX0ZsdtGksay-aKwhVmY7lPSwANUpmklCHayRJhn8T9fJ2YJp2q-03sg/exec";
+let estados={}, actual=null;
 
-let estados={},actual=null;
-
+/* CARGAR */
 async function cargar(){
  let r=await fetch(API_URL+"?action=status");
  let j=await r.json();
+
  estados=j.data||{};
  pintar();
 }
 
+/* PINTAR */
 function pintar(){
  let g=document.getElementById("grid");
  g.innerHTML="";
 
  for(let i=1;i<=100;i++){
+
   let d=document.createElement("div");
-  d.className="item";
+  d.className="num";
   d.innerText=i;
 
-  let estado=estados[i]?.estado;
+  let e=estados[i];
 
-  if(estado==="pendiente") d.classList.add("pendiente");
-  if(estado==="pagado") d.classList.add("pagado");
+  if(e){
+    if(e.estado==="pendiente") d.classList.add("pendiente");
+    if(e.estado==="pagado") d.classList.add("pagado");
 
-  d.onclick=()=>{
-    actual=i;
-    document.getElementById("panel").style.display="block";
-    document.getElementById("numSel").innerText="Número "+i;
+    d.onclick=()=>{
+      actual=i;
 
-    if(estados[i]){
-      document.getElementById("info").innerText=estado;
-    }else{
-      document.getElementById("info").innerText="Disponible";
+      document.getElementById("panel").style.display="block";
+      document.getElementById("numSel").innerText="Número "+i;
+
+      document.getElementById("info").innerHTML=
+        "<b>"+e.nombre+"</b><br>"+
+        "📱 "+e.wa+"<br>"+
+        "📧 "+(e.correo||"—")+"<br>"+
+        "Estado: "+e.estado;
     }
   }
 
@@ -110,19 +139,34 @@ function pintar(){
  }
 }
 
+/* ACCIONES */
 async function marcarPagado(){
+ if(!actual) return;
+
  await fetch(API_URL+"?action=pay&numero="+actual);
- cargar();
+
+ estados[actual].estado="pagado";
+ pintar();
 }
 
-async function marcarPendiente(){
- await fetch(API_URL+"?action=register&numero="+actual+"&nombre=ADMIN&wa=0");
- cargar();
+async function volverPendiente(){
+ if(!actual) return;
+
+ await fetch(API_URL+"?action=pendiente&numero="+actual);
+
+ estados[actual].estado="pendiente";
+ pintar();
 }
 
 async function liberar(){
+ if(!actual) return;
+
+ if(!confirm("¿Liberar número?")) return;
+
  await fetch(API_URL+"?action=delete&numero="+actual);
- cargar();
+
+ delete estados[actual];
+ pintar();
 }
 
 cargar();
@@ -131,4 +175,3 @@ setInterval(cargar,5000);
 
 </body>
 </html>
-```
